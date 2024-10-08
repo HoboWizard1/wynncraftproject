@@ -1,69 +1,61 @@
 async function getPlayerInfo() {
     const playerName = document.getElementById('playerName').value;
     const playerInfoDiv = document.getElementById('playerInfo');
+    const globalInfoDiv = document.getElementById('globalInfo');
+    const charactersDiv = document.getElementById('characters');
     playerInfoDiv.innerHTML = 'Loading...';
-
-    debugLog(`Attempting to fetch data for player: ${playerName}`);
-    debugLog(`User agent: ${navigator.userAgent}`);
-    debugLog(`Current page URL: ${window.location.href}`);
 
     try {
         const corsProxy = 'https://api.allorigins.win/raw?url=';
         const apiUrl = `${corsProxy}${encodeURIComponent(`https://api.wynncraft.com/v3/player/${playerName}?fullResult`)}`;
-        debugLog(`API URL (with CORS proxy): ${apiUrl}`);
-
-        const startTime = performance.now();
+        
         const response = await fetch(apiUrl);
-        const endTime = performance.now();
-        const responseTime = (endTime - startTime).toFixed(2);
-
-        debugLog(`Response status: ${response.status}`);
-        debugLog(`Response time: ${responseTime}ms`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
         const data = await response.json();
-        debugLog('API response received');
-        debugLog(`Response body: ${JSON.stringify(data, null, 2)}`);
 
-        if (data && data.characters) {
-            const activeCharacter = data.characters[data.activeCharacter];
-            if (activeCharacter) {
-                const characterInfo = `
-                    <h2>${data.username}</h2>
-                    <p>Class: ${activeCharacter.type}</p>
-                    <p>Level: ${activeCharacter.level}</p>
-                    <p>Total Level: ${activeCharacter.totalLevel}</p>
-                    <p>Playtime: ${(activeCharacter.playtime / 24).toFixed(2)} days</p>
+        if (data.username) {
+            playerInfoDiv.innerHTML = '';
+            document.getElementById('playerName').textContent = data.username;
+
+            // Display global player information
+            globalInfoDiv.innerHTML = `
+                <h3>Global Information</h3>
+                <p>Rank: ${data.rank}</p>
+                <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
+                <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
+                <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
+                <!-- Add more global information here -->
+            `;
+
+            // Display character information
+            charactersDiv.innerHTML = '<h3>Characters</h3>';
+            for (const [charId, character] of Object.entries(data.characters)) {
+                const charDiv = document.createElement('div');
+                charDiv.className = 'character';
+                charDiv.innerHTML = `
+                    <h4 onclick="toggleCharacter('${charId}')">${character.type} (Level ${character.level})</h4>
+                    <div id="${charId}" class="characterDetails" style="display: none;">
+                        <p>Nickname: ${character.nickname || 'None'}</p>
+                        <p>XP: ${character.xp} (${character.xpPercent}%)</p>
+                        <p>Total Level: ${character.totalLevel}</p>
+                        <p>Playtime: ${character.playtime.toFixed(2)} hours</p>
+                        <!-- Add more character details here -->
+                    </div>
                 `;
-                playerInfoDiv.innerHTML = characterInfo;
-            } else {
-                playerInfoDiv.innerHTML = 'No active character found.';
+                charactersDiv.appendChild(charDiv);
             }
         } else {
-            playerInfoDiv.innerHTML = 'Player data not found or in unexpected format.';
+            playerInfoDiv.innerHTML = 'Player not found';
         }
     } catch (error) {
         console.error('Error:', error);
-        debugLog(`Error name: ${error.name}`);
-        debugLog(`Error message: ${error.message}`);
-        debugLog(`Error stack: ${error.stack}`);
-        playerInfoDiv.innerHTML = 'Error fetching player data. Please try again.';
-
-        // Add network information
-        debugLog('This might be a CORS or network connectivity issue.');
-        debugLog(`Origin: ${window.location.origin}`);
-        debugLog(`Protocol: ${window.location.protocol}`);
-        debugLog('Network information:');
-        if ('connection' in navigator) {
-            debugLog(`Effective connection type: ${navigator.connection.effectiveType}`);
-            debugLog(`Downlink: ${navigator.connection.downlink} Mbps`);
-        } else {
-            debugLog('Network information not available');
-        }
+        playerInfoDiv.innerHTML = 'Error fetching player data';
+        debugLog(`Error: ${error.message}`);
     }
+}
+
+function toggleCharacter(charId) {
+    const charDetails = document.getElementById(charId);
+    charDetails.style.display = charDetails.style.display === 'none' ? 'block' : 'none';
 }
 
 function copyDebugToClipboard() {

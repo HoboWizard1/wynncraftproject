@@ -20,7 +20,11 @@
             <h2>Player Information</h2>
             <input type="text" id="playerName" placeholder="Enter player name">
             <button onclick="getPlayerInfo()">Get Player Info</button>
-            <div id="playerInfo"></div>
+            <div id="playerInfo">
+                <h2 id="playerName"></h2>
+                <div id="globalInfo"></div>
+                <div id="characters"></div>
+            </div>
         </div>
 
         <div id="ItemInfo" class="tabcontent">
@@ -36,7 +40,7 @@
         <div id="debugConsole"></div>
         <div id="debugButtons">
             <button onclick="clearDebugConsole()">Clear Console</button>
-            <button id="copyDebugButton" onclick="copyDebugToClipboard()">Copy Debug Log</button>
+            <button onclick="copyDebugToClipboard()">Copy Debug Log</button>
         </div>
     </div>
     
