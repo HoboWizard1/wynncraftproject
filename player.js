@@ -14,8 +14,23 @@ document.addEventListener('DOMContentLoaded', function() {
 function debugLog(message) {
     const debugConsole = document.getElementById('debugConsole');
     const timestamp = new Date().toLocaleTimeString();
-    debugConsole.innerHTML += `[${timestamp}] ${message}<br>`;
+    debugConsole.innerHTML += `[${timestamp}] ${message}\n`;
     debugConsole.scrollTop = debugConsole.scrollHeight;
+}
+
+function clearDebugConsole() {
+    document.getElementById('debugConsole').innerHTML = '';
+}
+
+function copyDebugToClipboard() {
+    const debugConsole = document.getElementById('debugConsole');
+    const textArea = document.createElement('textarea');
+    textArea.value = debugConsole.innerText;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    debugLog('Debug log copied to clipboard');
 }
 
 async function getPlayerInfo() {
@@ -107,15 +122,4 @@ function generateCharacterDetails(character) {
 function toggleCharacter(charId) {
     const charDetails = document.getElementById(charId);
     charDetails.style.display = charDetails.style.display === 'none' ? 'block' : 'none';
-}
-
-function copyDebugToClipboard() {
-    const debugConsole = document.getElementById('debugConsole');
-    const textArea = document.createElement('textarea');
-    textArea.value = debugConsole.innerText;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-    alert('Debug log copied to clipboard!');
 }
