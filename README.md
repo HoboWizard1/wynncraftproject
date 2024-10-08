@@ -2,12 +2,13 @@
 
 ## Description
 
-This project is a web application that interacts with the Wynncraft API to display player information.
+This project is a web application that interacts with the Wynncraft API to do it all.
 
 ## Features
 
 - Player information lookup
 - Character details display
+- Item information lookup
 
 ## Installation
 
@@ -16,4 +17,4 @@ This project is a web application that interacts with the Wynncraft API to displ
 
 ## Usage
 
-Enter a player's name in the input field and click "Get Info" to display their Wynncraft information.
+A all in one Wynncraft info lookup tool.
