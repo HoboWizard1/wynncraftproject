@@ -7,6 +7,7 @@ debugBox.innerHTML = `
         <button onclick="clearDebugBox()">Clear</button>
         <button onclick="copyDebugInfo()">Copy</button>
         <button id="toggleDebugBox">▲</button>
+        <button id="expandDebugBox">⇱</button>
     </div>
     <div id="debugContent" style="display: none;"></div>
 `;
@@ -54,8 +55,23 @@ function toggleDebugBox() {
     }
 }
 
-// Add event listener for toggle button
+// Expand debug box
+function expandDebugBox() {
+    const debugBox = document.getElementById('debugBox');
+    const expandButton = document.getElementById('expandDebugBox');
+    
+    if (debugBox.style.height !== '50vh') {
+        debugBox.style.height = '50vh';
+        expandButton.textContent = '⇲';
+    } else {
+        debugBox.style.height = '200px';
+        expandButton.textContent = '⇱';
+    }
+}
+
+// Add event listeners for toggle and expand buttons
 document.getElementById('toggleDebugBox').addEventListener('click', toggleDebugBox);
+document.getElementById('expandDebugBox').addEventListener('click', expandDebugBox);
 
 // Override console.error to use debugLog
 console.error = (message) => {

@@ -109,7 +109,7 @@ button {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 200px;
+    height: auto;
     background-color: #000;
     color: #fff;
     font-family: monospace;
@@ -139,13 +139,14 @@ button {
     padding: 5px 10px;
     cursor: pointer;
     font-size: 12px;
+    margin-left: 5px;
 }
 
 #debugHeader button:hover {
     background-color: #777;
 }
 
-#toggleDebugBox {
+#toggleDebugBox, #expandDebugBox {
     width: 30px;
     height: 30px;
     font-size: 16px !important;

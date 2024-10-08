@@ -3,22 +3,30 @@ async function getPlayerInfo() {
     const playerInfoDiv = document.getElementById('playerInfo');
     playerInfoDiv.innerHTML = 'Loading...';
 
+    debugLog(`Fetching player info for: ${playerName}`);
+
     try {
         const corsProxy = 'https://api.allorigins.win/raw?url=';
         const apiUrl = `${corsProxy}${encodeURIComponent(`https://api.wynncraft.com/v3/player/${playerName}?fullResult`)}`;
         
+        debugLog(`API URL: ${apiUrl}`);
+
         const response = await fetch(apiUrl);
+        debugLog(`Response status: ${response.status}`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const data = await response.json();
+        debugLog('API response received');
+        debugLog(`API Data: ${JSON.stringify(data, null, 2)}`);
 
         if (data.username) {
             displayPlayerInfo(data);
         } else {
             playerInfoDiv.innerHTML = `<p class="error">Player "${playerName}" not found. Please check the spelling and try again.</p>`;
+            debugLog(`Player "${playerName}" not found`);
         }
     } catch (error) {
         console.error('Error:', error);
