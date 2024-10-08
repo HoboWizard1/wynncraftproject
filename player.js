@@ -15,69 +15,54 @@ async function getPlayerInfo() {
         const startTime = performance.now();
         const response = await fetch(apiUrl);
         const endTime = performance.now();
-        
+        const responseTime = (endTime - startTime).toFixed(2);
+
         debugLog(`Response status: ${response.status}`);
-        debugLog(`Response time: ${(endTime - startTime).toFixed(2)}ms`);
+        debugLog(`Response time: ${responseTime}ms`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const data = await response.json();
         debugLog('API response received');
         debugLog(`Response body: ${JSON.stringify(data, null, 2)}`);
 
-        if (data.Error) {
-            playerInfoDiv.innerHTML = `<p class="error">${data.Error}</p>`;
-            return;
-        }
-
-        if (data.username) {
-            let infoHTML = `
-                <h2>${data.username}</h2>
-                <p>Rank: ${data.rank}</p>
-                <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
-                <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
-                <p>Playtime: ${Math.round(data.playtime / 60)} hours</p>
-                <h3>Characters:</h3>
-            `;
-
-            for (const [characterUuid, character] of Object.entries(data.characters)) {
-                infoHTML += `
-                    <div>
-                        <h4>${character.type}</h4>
-                        <p>Level: ${character.level}</p>
-                        <p>Total Level: ${character.totalLevel}</p>
-                    </div>
+        if (data && data.characters) {
+            const activeCharacter = data.characters[data.activeCharacter];
+            if (activeCharacter) {
+                const characterInfo = `
+                    <h2>${data.username}</h2>
+                    <p>Class: ${activeCharacter.type}</p>
+                    <p>Level: ${activeCharacter.level}</p>
+                    <p>Total Level: ${activeCharacter.totalLevel}</p>
+                    <p>Playtime: ${(activeCharacter.playtime / 24).toFixed(2)} days</p>
                 `;
+                playerInfoDiv.innerHTML = characterInfo;
+            } else {
+                playerInfoDiv.innerHTML = 'No active character found.';
             }
-
-            if (data.guild && data.guild.name) {
-                infoHTML += `
-                    <h3>Guild:</h3>
-                    <p>Name: ${data.guild.name}</p>
-                    <p>Rank: ${data.guild.rank}</p>
-                `;
-            }
-
-            playerInfoDiv.innerHTML = infoHTML;
         } else {
-            playerInfoDiv.innerHTML = `<p class="error">Error: Unexpected API response format</p>`;
-            debugLog('Unexpected API response: ' + JSON.stringify(data, null, 2));
+            playerInfoDiv.innerHTML = 'Player data not found or in unexpected format.';
         }
     } catch (error) {
+        console.error('Error:', error);
         debugLog(`Error name: ${error.name}`);
         debugLog(`Error message: ${error.message}`);
         debugLog(`Error stack: ${error.stack}`);
-        playerInfoDiv.innerHTML = `<p class="error">Error: ${error.message}. Check the debug console for more details.</p>`;
-    }
+        playerInfoDiv.innerHTML = 'Error fetching player data. Please try again.';
 
-    // Add network information
-    debugLog('This might be a CORS or network connectivity issue.');
-    debugLog(`Origin: ${window.location.origin}`);
-    debugLog(`Protocol: ${window.location.protocol}`);
-    debugLog('Network information:');
-    if ('connection' in navigator) {
-        debugLog(`Effective connection type: ${navigator.connection.effectiveType}`);
-        debugLog(`Downlink: ${navigator.connection.downlink} Mbps`);
-    } else {
-        debugLog('Network information not available');
+        // Add network information
+        debugLog('This might be a CORS or network connectivity issue.');
+        debugLog(`Origin: ${window.location.origin}`);
+        debugLog(`Protocol: ${window.location.protocol}`);
+        debugLog('Network information:');
+        if ('connection' in navigator) {
+            debugLog(`Effective connection type: ${navigator.connection.effectiveType}`);
+            debugLog(`Downlink: ${navigator.connection.downlink} Mbps`);
+        } else {
+            debugLog('Network information not available');
+        }
     }
 }
 

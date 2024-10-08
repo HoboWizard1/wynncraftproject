@@ -105,8 +105,17 @@ button {
     font-size: 12px;
 }
 
-#copyDebugButton {
+/* Add or update these styles */
+#debugConsoleContainer {
+    margin-top: 20px;
+}
+
+#debugButtons {
     margin-top: 10px;
+}
+
+#debugButtons button {
+    margin-right: 10px;
     padding: 5px 10px;
     background-color: #4CAF50;
     color: white;
@@ -114,6 +123,6 @@ button {
     cursor: pointer;
 }
 
-#copyDebugButton:hover {
+#debugButtons button:hover {
     background-color: #45a049;
 }
