@@ -118,6 +118,7 @@ button {
     display: flex;
     flex-direction: column;
     z-index: 1000;
+    transition: height 0.3s ease;
 }
 
 #debugHeader {
@@ -143,6 +144,15 @@ button {
 
 #debugHeader button:hover {
     background-color: #777;
+}
+
+#toggleDebugBox {
+    width: 30px;
+    height: 30px;
+    font-size: 16px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #debugContent {
