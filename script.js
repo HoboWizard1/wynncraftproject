@@ -12,14 +12,4 @@ function openTab(evt, tabName) {
     evt.currentTarget.className += " active";
 }
 
-function debugLog(message) {
-    const debugOutput = document.getElementById('debugOutput');
-    const timestamp = new Date().toLocaleTimeString();
-    debugOutput.innerHTML += `[${timestamp}] ${message}\n`;
-    debugOutput.scrollTop = debugOutput.scrollHeight;
-}
-
-console.log = debugLog;
-console.error = (message) => debugLog(`ERROR: ${message}`);
-
 debugLog('script.js loaded');

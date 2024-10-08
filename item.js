@@ -3,21 +3,21 @@ async function getItemInfo() {
     const itemInfoDiv = document.getElementById('itemInfo');
     itemInfoDiv.innerHTML = 'Loading...';
 
-    console.log(`Attempting to fetch data for item: ${itemName}`);
+    debugLog(`Attempting to fetch data for item: ${itemName}`);
 
     try {
         const apiUrl = `https://api.wynncraft.com/v3/item/search/${encodeURIComponent(itemName)}`;
-        console.log(`API URL: ${apiUrl}`);
+        debugLog(`API URL: ${apiUrl}`);
 
         const response = await fetch(apiUrl);
-        console.log(`Response status: ${response.status}`);
+        debugLog(`Response status: ${response.status}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log('API response:', data);
+        debugLog('API response:', data);
 
         if (data.data && data.data.length > 0) {
             const itemData = data.data[0];
@@ -39,10 +39,10 @@ async function getItemInfo() {
             itemInfoDiv.innerHTML = infoHTML;
         } else {
             itemInfoDiv.innerHTML = `Error: Item not found or API returned unexpected data`;
-            console.error('Unexpected API response:', data);
+            debugLog('Unexpected API response:', data);
         }
     } catch (error) {
-        console.error('Error details:', error);
-        itemInfoDiv.innerHTML = `Error: ${error.message}. Check the console for more details.`;
+        debugLog('Error details:', error);
+        itemInfoDiv.innerHTML = `Error: ${error.message}. Check the debug console for more details.`;
     }
 }

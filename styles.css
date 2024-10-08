@@ -32,6 +32,7 @@ button {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
+    color: #000; /* Change text color to black */
 }
 
 /* Tab styles */
@@ -68,18 +69,27 @@ button {
 
 #debugConsole {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #333;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    height: 200px;
+    background-color: #000;
     color: #fff;
     padding: 10px;
-    max-height: 200px;
+    border-radius: 10px;
     overflow-y: auto;
+    font-family: monospace;
+    font-size: 12px;
+    z-index: 1000;
+}
+
+#debugConsole h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 14px;
 }
 
 #debugOutput {
-    font-family: monospace;
     white-space: pre-wrap;
     word-wrap: break-word;
 }

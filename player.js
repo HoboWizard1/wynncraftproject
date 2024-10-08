@@ -18,6 +18,7 @@ async function getPlayerInfo() {
 
         const data = await response.json();
         debugLog('API response received');
+        debugLog(JSON.stringify(data, null, 2));
 
         if (data.username) {
             let infoHTML = `
@@ -52,7 +53,7 @@ async function getPlayerInfo() {
             playerInfoDiv.innerHTML = infoHTML;
         } else {
             playerInfoDiv.innerHTML = `Error: Player not found or API returned unexpected data`;
-            debugLog('Unexpected API response: ' + JSON.stringify(data));
+            debugLog('Unexpected API response: ' + JSON.stringify(data, null, 2));
         }
     } catch (error) {
         debugLog('Error details: ' + error.message);
