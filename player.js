@@ -100,20 +100,20 @@ function generateGlobalData(data) {
 
         if (data.globalData.dungeons) {
             globalData += `<p><strong>Total Dungeons:</strong> ${data.globalData.dungeons.total}</p>`;
-            globalData += '<details><summary>Dungeon List</summary><ul>';
+            globalData += '<p><strong>Dungeon List:</strong></p><ul>';
             for (const [dungeon, count] of Object.entries(data.globalData.dungeons.list)) {
                 globalData += `<li>${dungeon}: ${count}</li>`;
             }
-            globalData += '</ul></details>';
+            globalData += '</ul>';
         }
 
         if (data.globalData.raids) {
             globalData += `<p><strong>Total Raids:</strong> ${data.globalData.raids.total}</p>`;
-            globalData += '<details><summary>Raid List</summary><ul>';
+            globalData += '<p><strong>Raid List:</strong></p><ul>';
             for (const [raid, count] of Object.entries(data.globalData.raids.list)) {
                 globalData += `<li>${raid}: ${count}</li>`;
             }
-            globalData += '</ul></details>';
+            globalData += '</ul>';
         }
 
         if (data.globalData.pvp) {
@@ -129,19 +129,19 @@ function generateGlobalData(data) {
     }
 
     if (data.ranking) {
-        globalData += '<details><summary>Current Rankings</summary><ul>';
+        globalData += '<p><strong>Current Rankings:</strong></p><ul>';
         for (const [stat, rank] of Object.entries(data.ranking)) {
             globalData += `<li>${formatRankingName(stat)}: ${rank}</li>`;
         }
-        globalData += '</ul></details>';
+        globalData += '</ul>';
     }
 
     if (data.previousRanking) {
-        globalData += '<details><summary>Previous Rankings</summary><ul>';
+        globalData += '<p><strong>Previous Rankings:</strong></p><ul>';
         for (const [stat, rank] of Object.entries(data.previousRanking)) {
             globalData += `<li>${formatRankingName(stat)}: ${rank}</li>`;
         }
-        globalData += '</ul></details>';
+        globalData += '</ul>';
     }
 
     return globalData;
