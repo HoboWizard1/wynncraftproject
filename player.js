@@ -43,37 +43,43 @@ async function getPlayerInfo() {
 function displayPlayerInfo(data) {
     debugLog('Displaying player information');
     const playerInfoDiv = document.getElementById('playerInfo');
-    playerInfoDiv.innerHTML = `
-        <h2>${data.username}</h2>
-        <p>Rank: ${data.rank}</p>
-        <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
-        <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
-        <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
-    `;
-
-    if (data.guild) {
-        playerInfoDiv.innerHTML += `
-            <h3>Guild</h3>
-            <p>Name: ${data.guild.name}</p>
-            <p>Rank: ${data.guild.rank}</p>
+    try {
+        playerInfoDiv.innerHTML = `
+            <h2>${data.username}</h2>
+            <p>Rank: ${data.rank}</p>
+            <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
+            <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
+            <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
         `;
-    }
 
-    if (data.characters) {
-        playerInfoDiv.innerHTML += '<h3>Characters</h3>';
-        for (const [charId, character] of Object.entries(data.characters)) {
+        if (data.guild) {
             playerInfoDiv.innerHTML += `
-                <div class="character">
-                    <h4 onclick="toggleCharacter('${charId}')">${character.type} (Level ${character.level})</h4>
-                    <div id="${charId}" class="characterDetails" style="display: none;">
-                        ${generateCharacterDetails(character)}
-                    </div>
-                </div>
+                <h3>Guild</h3>
+                <p>Name: ${data.guild.name}</p>
+                <p>Rank: ${data.guild.rank}</p>
             `;
         }
-    }
 
-    debugLog('Player information displayed successfully');
+        if (data.characters) {
+            playerInfoDiv.innerHTML += '<h3>Characters</h3>';
+            for (const [charId, character] of Object.entries(data.characters)) {
+                playerInfoDiv.innerHTML += `
+                    <div class="character">
+                        <h4 onclick="toggleCharacter('${charId}')">${character.type} (Level ${character.level})</h4>
+                        <div id="${charId}" class="characterDetails" style="display: none;">
+                            ${generateCharacterDetails(character)}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        debugLog('Player information displayed successfully');
+    } catch (error) {
+        console.error('Error in displayPlayerInfo:', error);
+        debugLog(`Error in displayPlayerInfo: ${error.message}`);
+        playerInfoDiv.innerHTML = `<p class="error">An error occurred while displaying player information. Please try again later.</p>`;
+    }
 }
 
 function displayErrorMessage(error) {
@@ -101,25 +107,36 @@ function displayErrorMessage(error) {
 }
 
 function generateCharacterDetails(character) {
-    let details = '';
-    for (const [key, value] of Object.entries(character)) {
-        if (typeof value === 'object') {
-            details += `<p><strong>${key}:</strong></p>`;
-            details += '<ul>';
-            for (const [subKey, subValue] of Object.entries(value)) {
-                details += `<li><strong>${subKey}:</strong> ${JSON.stringify(subValue)}</li>`;
+    try {
+        let details = '';
+        for (const [key, value] of Object.entries(character)) {
+            if (typeof value === 'object' && value !== null) {
+                details += `<p><strong>${key}:</strong></p>`;
+                details += '<ul>';
+                for (const [subKey, subValue] of Object.entries(value)) {
+                    details += `<li><strong>${subKey}:</strong> ${JSON.stringify(subValue)}</li>`;
+                }
+                details += '</ul>';
+            } else {
+                details += `<p><strong>${key}:</strong> ${value}</p>`;
             }
-            details += '</ul>';
-        } else {
-            details += `<p><strong>${key}:</strong> ${value}</p>`;
         }
+        return details;
+    } catch (error) {
+        console.error('Error in generateCharacterDetails:', error);
+        debugLog(`Error in generateCharacterDetails: ${error.message}`);
+        return '<p class="error">Error generating character details</p>';
     }
-    return details;
 }
 
 function toggleCharacter(charId) {
     const charDetails = document.getElementById(charId);
-    charDetails.style.display = charDetails.style.display === 'none' ? 'block' : 'none';
+    if (charDetails) {
+        charDetails.style.display = charDetails.style.display === 'none' ? 'block' : 'none';
+    } else {
+        console.error(`Character details element not found for ID: ${charId}`);
+        debugLog(`Error: Character details element not found for ID: ${charId}`);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {

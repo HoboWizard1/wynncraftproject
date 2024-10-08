@@ -166,4 +166,5 @@ button {
     padding: 10px;
     white-space: pre-wrap;
     word-wrap: break-word;
+    max-height: calc(50vh - 40px); /* Subtract header height */
 }

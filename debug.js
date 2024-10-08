@@ -11,9 +11,12 @@ debugBox.innerHTML = `
             <button id="expandDebugBox">⇱</button>
         </div>
     </div>
-    <div id="debugContent" style="display: none;"></div>
+    <div id="debugContent"></div>
 `;
 document.body.appendChild(debugBox);
+
+let isExpanded = false;
+let isOpen = false;
 
 // Debug logging function
 function debugLog(message) {
@@ -47,9 +50,11 @@ function toggleDebugBox() {
     const debugContent = document.getElementById('debugContent');
     const toggleButton = document.getElementById('toggleDebugBox');
     
-    if (debugContent.style.display === 'none') {
+    isOpen = !isOpen;
+    
+    if (isOpen) {
         debugContent.style.display = 'block';
-        debugBox.style.height = debugBox.style.height === '50vh' ? '50vh' : '200px';
+        debugBox.style.height = isExpanded ? '50vh' : '200px';
         toggleButton.textContent = '▼';
     } else {
         debugContent.style.display = 'none';
@@ -61,13 +66,14 @@ function toggleDebugBox() {
 // Expand debug box
 function expandDebugBox() {
     const debugBox = document.getElementById('debugBox');
-    const debugContent = document.getElementById('debugContent');
     const expandButton = document.getElementById('expandDebugBox');
     
-    if (debugBox.style.height !== '50vh') {
+    isExpanded = !isExpanded;
+    
+    if (isExpanded) {
         debugBox.style.height = '50vh';
         expandButton.textContent = '⇲';
-        if (debugContent.style.display === 'none') {
+        if (!isOpen) {
             toggleDebugBox();
         }
     } else {
@@ -83,7 +89,10 @@ document.getElementById('expandDebugBox').addEventListener('click', expandDebugB
 // Override console.error to use debugLog
 console.error = (message) => {
     debugLog(`ERROR: ${message}`);
-    toggleDebugBox(); // Open debug console on error
+    if (!isOpen) {
+        toggleDebugBox(); // Open debug console on error
+    }
 };
 
-// Don't log anything on initialization
+// Initialize debug console
+debugLog('Debug console initialized');
