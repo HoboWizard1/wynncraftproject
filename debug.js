@@ -4,10 +4,12 @@ debugBox.id = 'debugBox';
 debugBox.innerHTML = `
     <div id="debugHeader">
         <h3>Debug Console</h3>
-        <button onclick="clearDebugBox()">Clear</button>
-        <button onclick="copyDebugInfo()">Copy</button>
-        <button id="toggleDebugBox">▲</button>
-        <button id="expandDebugBox">⇱</button>
+        <div class="debugButtons">
+            <button onclick="clearDebugBox()">Clear</button>
+            <button onclick="copyDebugInfo()">Copy</button>
+            <button id="toggleDebugBox">▲</button>
+            <button id="expandDebugBox">⇱</button>
+        </div>
     </div>
     <div id="debugContent" style="display: none;"></div>
 `;
@@ -24,6 +26,7 @@ function debugLog(message) {
 // Clear debug box
 function clearDebugBox() {
     document.getElementById('debugContent').innerHTML = '';
+    debugLog('Debug console cleared');
 }
 
 // Copy debug info
@@ -46,7 +49,7 @@ function toggleDebugBox() {
     
     if (debugContent.style.display === 'none') {
         debugContent.style.display = 'block';
-        debugBox.style.height = '200px';
+        debugBox.style.height = debugBox.style.height === '50vh' ? '50vh' : '200px';
         toggleButton.textContent = '▼';
     } else {
         debugContent.style.display = 'none';
@@ -58,11 +61,15 @@ function toggleDebugBox() {
 // Expand debug box
 function expandDebugBox() {
     const debugBox = document.getElementById('debugBox');
+    const debugContent = document.getElementById('debugContent');
     const expandButton = document.getElementById('expandDebugBox');
     
     if (debugBox.style.height !== '50vh') {
         debugBox.style.height = '50vh';
         expandButton.textContent = '⇲';
+        if (debugContent.style.display === 'none') {
+            toggleDebugBox();
+        }
     } else {
         debugBox.style.height = '200px';
         expandButton.textContent = '⇱';

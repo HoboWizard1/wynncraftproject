@@ -133,6 +133,11 @@ button {
     margin: 0;
 }
 
+.debugButtons {
+    display: flex;
+    gap: 5px;
+}
+
 #debugHeader button {
     background-color: #555;
     color: #fff;
@@ -140,7 +145,6 @@ button {
     padding: 5px 10px;
     cursor: pointer;
     font-size: 12px;
-    margin-left: 5px;
 }
 
 #debugHeader button:hover {
