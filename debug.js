@@ -7,7 +7,8 @@ debugBox.innerHTML = `
         <div class="debugButtons">
             <button onclick="clearDebugBox()">Clear</button>
             <button onclick="copyDebugInfo()">Copy</button>
-            <button id="toggleDebugBox">▲</button>
+            <button id="debugBoxUp">▲</button>
+            <button id="debugBoxDown">▼</button>
         </div>
     </div>
     <div id="debugContent"></div>
@@ -42,41 +43,52 @@ function copyDebugInfo() {
     debugLog('Debug information copied to clipboard');
 }
 
-// Toggle debug box
-function toggleDebugBox() {
+// Move debug box up
+function moveDebugBoxUp() {
+    if (consoleState < 2) {
+        consoleState++;
+        updateDebugBoxState();
+    }
+}
+
+// Move debug box down
+function moveDebugBoxDown() {
+    if (consoleState > 0) {
+        consoleState--;
+        updateDebugBoxState();
+    }
+}
+
+// Update debug box state
+function updateDebugBoxState() {
     const debugBox = document.getElementById('debugBox');
     const debugContent = document.getElementById('debugContent');
-    const toggleButton = document.getElementById('toggleDebugBox');
-    
-    consoleState = (consoleState + 1) % 3;
     
     switch(consoleState) {
         case 0: // Closed
             debugContent.style.display = 'none';
             debugBox.style.height = 'auto';
-            toggleButton.textContent = '▲';
             break;
         case 1: // Normal
             debugContent.style.display = 'block';
             debugBox.style.height = '200px';
-            toggleButton.textContent = '▲';
             break;
         case 2: // Expanded
             debugContent.style.display = 'block';
             debugBox.style.height = '50vh';
-            toggleButton.textContent = '▼';
             break;
     }
 }
 
-// Add event listener for toggle button
-document.getElementById('toggleDebugBox').addEventListener('click', toggleDebugBox);
+// Add event listeners for up and down buttons
+document.getElementById('debugBoxUp').addEventListener('click', moveDebugBoxUp);
+document.getElementById('debugBoxDown').addEventListener('click', moveDebugBoxDown);
 
 // Override console.error to use debugLog
 console.error = (message) => {
     debugLog(`ERROR: ${message}`);
     if (consoleState === 0) {
-        toggleDebugBox(); // Open debug console on error
+        moveDebugBoxUp(); // Open debug console on error
     }
 };
 
