@@ -88,12 +88,74 @@ function displayPlayerInfo(data) {
 
 function generateGlobalData(data) {
     let globalData = '';
-    for (const [key, value] of Object.entries(data)) {
-        if (typeof value !== 'object' && key !== 'username' && key !== 'rank' && key !== 'supportRank' && key !== 'firstJoin' && key !== 'lastJoin' && key !== 'playtime' && key !== 'online' && key !== 'server') {
-            globalData += `<p><strong>${key}:</strong> ${value}</p>`;
+    
+    if (data.globalData) {
+        globalData += `
+            <p><strong>Total Level:</strong> ${data.globalData.totalLevel}</p>
+            <p><strong>Wars:</strong> ${data.globalData.wars}</p>
+            <p><strong>Killed Mobs:</strong> ${data.globalData.killedMobs}</p>
+            <p><strong>Chests Found:</strong> ${data.globalData.chestsFound}</p>
+            <p><strong>Completed Quests:</strong> ${data.globalData.completedQuests}</p>
+        `;
+
+        if (data.globalData.dungeons) {
+            globalData += `<p><strong>Total Dungeons:</strong> ${data.globalData.dungeons.total}</p>`;
+            globalData += '<details><summary>Dungeon List</summary><ul>';
+            for (const [dungeon, count] of Object.entries(data.globalData.dungeons.list)) {
+                globalData += `<li>${dungeon}: ${count}</li>`;
+            }
+            globalData += '</ul></details>';
+        }
+
+        if (data.globalData.raids) {
+            globalData += `<p><strong>Total Raids:</strong> ${data.globalData.raids.total}</p>`;
+            globalData += '<details><summary>Raid List</summary><ul>';
+            for (const [raid, count] of Object.entries(data.globalData.raids.list)) {
+                globalData += `<li>${raid}: ${count}</li>`;
+            }
+            globalData += '</ul></details>';
+        }
+
+        if (data.globalData.pvp) {
+            globalData += `
+                <p><strong>PvP Kills:</strong> ${data.globalData.pvp.kills}</p>
+                <p><strong>PvP Deaths:</strong> ${data.globalData.pvp.deaths}</p>
+            `;
         }
     }
+
+    if (data.forumLink) {
+        globalData += `<p><strong>Forum Link:</strong> <a href="https://forums.wynncraft.com/members/${data.forumLink}" target="_blank">View Forum Profile</a></p>`;
+    }
+
+    if (data.ranking) {
+        globalData += '<details><summary>Current Rankings</summary><ul>';
+        for (const [stat, rank] of Object.entries(data.ranking)) {
+            globalData += `<li>${formatRankingName(stat)}: ${rank}</li>`;
+        }
+        globalData += '</ul></details>';
+    }
+
+    if (data.previousRanking) {
+        globalData += '<details><summary>Previous Rankings</summary><ul>';
+        for (const [stat, rank] of Object.entries(data.previousRanking)) {
+            globalData += `<li>${formatRankingName(stat)}: ${rank}</li>`;
+        }
+        globalData += '</ul></details>';
+    }
+
     return globalData;
+}
+
+function formatRankingName(name) {
+    return name
+        .replace(/([A-Z])/g, ' $1')
+        .replace(/^./, str => str.toUpperCase())
+        .replace(/Sr/g, 'SR')
+        .replace(/Tcc/g, 'TCC')
+        .replace(/Tna/g, 'TNA')
+        .replace(/Nol/g, 'NOL')
+        .replace(/Nog/g, 'NOG');
 }
 
 function generateCharacterDetails(character) {
