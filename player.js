@@ -4,21 +4,29 @@ async function getPlayerInfo() {
     playerInfoDiv.innerHTML = 'Loading...';
 
     debugLog(`Attempting to fetch data for player: ${playerName}`);
+    debugLog(`User agent: ${navigator.userAgent}`);
+    debugLog(`Current page URL: ${window.location.href}`);
 
     try {
-        const apiUrl = `https://api.wynncraft.com/v3/player/${playerName}?fullResult`;
-        debugLog(`API URL: ${apiUrl}`);
+        const corsProxy = 'https://api.allorigins.win/raw?url=';
+        const apiUrl = `${corsProxy}${encodeURIComponent(`https://api.wynncraft.com/v3/player/${playerName}?fullResult`)}`;
+        debugLog(`API URL (with CORS proxy): ${apiUrl}`);
 
+        const startTime = performance.now();
         const response = await fetch(apiUrl);
+        const endTime = performance.now();
+        
         debugLog(`Response status: ${response.status}`);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        debugLog(`Response time: ${(endTime - startTime).toFixed(2)}ms`);
 
         const data = await response.json();
         debugLog('API response received');
-        debugLog(JSON.stringify(data, null, 2));
+        debugLog(`Response body: ${JSON.stringify(data, null, 2)}`);
+
+        if (data.Error) {
+            playerInfoDiv.innerHTML = `<p class="error">${data.Error}</p>`;
+            return;
+        }
 
         if (data.username) {
             let infoHTML = `
@@ -50,12 +58,36 @@ async function getPlayerInfo() {
 
             playerInfoDiv.innerHTML = infoHTML;
         } else {
-            playerInfoDiv.innerHTML = `Error: Player not found or API returned unexpected data`;
+            playerInfoDiv.innerHTML = `<p class="error">Error: Unexpected API response format</p>`;
             debugLog('Unexpected API response: ' + JSON.stringify(data, null, 2));
         }
     } catch (error) {
-        debugLog(`Error details: ${error.message}`);
+        debugLog(`Error name: ${error.name}`);
+        debugLog(`Error message: ${error.message}`);
         debugLog(`Error stack: ${error.stack}`);
-        playerInfoDiv.innerHTML = `Error: ${error.message}. Check the debug console for more details.`;
+        playerInfoDiv.innerHTML = `<p class="error">Error: ${error.message}. Check the debug console for more details.</p>`;
     }
+
+    // Add network information
+    debugLog('This might be a CORS or network connectivity issue.');
+    debugLog(`Origin: ${window.location.origin}`);
+    debugLog(`Protocol: ${window.location.protocol}`);
+    debugLog('Network information:');
+    if ('connection' in navigator) {
+        debugLog(`Effective connection type: ${navigator.connection.effectiveType}`);
+        debugLog(`Downlink: ${navigator.connection.downlink} Mbps`);
+    } else {
+        debugLog('Network information not available');
+    }
+}
+
+function copyDebugToClipboard() {
+    const debugConsole = document.getElementById('debugConsole');
+    const textArea = document.createElement('textarea');
+    textArea.value = debugConsole.innerText;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert('Debug log copied to clipboard!');
 }
