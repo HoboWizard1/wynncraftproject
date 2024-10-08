@@ -3,24 +3,31 @@ async function getPlayerInfo() {
     const playerInfoDiv = document.getElementById('playerInfo');
     playerInfoDiv.innerHTML = 'Loading...';
 
-    debugLog(`Fetching player info for: ${playerName}`);
+    debugLog(`Attempting to fetch data for player: ${playerName}`);
 
     try {
+        debugLog(`User agent: ${navigator.userAgent}`);
+        debugLog(`Current page URL: ${window.location.href}`);
+
         const corsProxy = 'https://api.allorigins.win/raw?url=';
         const apiUrl = `${corsProxy}${encodeURIComponent(`https://api.wynncraft.com/v3/player/${playerName}?fullResult`)}`;
         
-        debugLog(`API URL: ${apiUrl}`);
+        debugLog(`API URL (with CORS proxy): ${apiUrl}`);
 
+        const startTime = performance.now();
         const response = await fetch(apiUrl);
-        debugLog(`Response status: ${response.status}`);
+        const endTime = performance.now();
         
+        debugLog(`Response status: ${response.status}`);
+        debugLog(`Response time: ${(endTime - startTime).toFixed(2)}ms`);
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const data = await response.json();
         debugLog('API response received');
-        debugLog(`API Data: ${JSON.stringify(data, null, 2)}`);
+        const data = await response.json();
+        debugLog('Response body: ' + JSON.stringify(data).substring(0, 500) + '...');
 
         if (data.username) {
             displayPlayerInfo(data);
@@ -34,6 +41,7 @@ async function getPlayerInfo() {
 }
 
 function displayPlayerInfo(data) {
+    debugLog('Displaying player information');
     const playerInfoDiv = document.getElementById('playerInfo');
     playerInfoDiv.innerHTML = `
         <h2>${data.username}</h2>
@@ -64,6 +72,32 @@ function displayPlayerInfo(data) {
             `;
         }
     }
+
+    debugLog('Player information displayed successfully');
+}
+
+function displayErrorMessage(error) {
+    debugLog('Displaying error message');
+    const playerInfoDiv = document.getElementById('playerInfo');
+    let errorMessage = 'An error occurred while fetching player data. ';
+
+    if (error.message.includes('Player not found')) {
+        errorMessage += 'Player not found. Please check the spelling and try again.';
+    } else if (error.message.includes('HTTP error')) {
+        errorMessage += 'The server might be down or experiencing issues. Please try again later.';
+    } else if (error.message.includes('NetworkError')) {
+        errorMessage += 'There seems to be a problem with your internet connection. Please check your connection and try again.';
+    } else if (error.message.includes('SyntaxError')) {
+        errorMessage += 'The data received from the server was invalid. This might be a temporary issue. Please try again later.';
+    } else {
+        errorMessage += 'Please try again later or contact support if the problem persists.';
+    }
+
+    errorMessage += ' Check the debug console for more information.';
+
+    playerInfoDiv.innerHTML = `<p class="error">${errorMessage}</p>`;
+    debugLog(`Error message displayed: ${errorMessage}`);
+    debugLog(`Error details: ${error.stack}`);
 }
 
 function generateCharacterDetails(character) {
@@ -88,44 +122,22 @@ function toggleCharacter(charId) {
     charDetails.style.display = charDetails.style.display === 'none' ? 'block' : 'none';
 }
 
-function displayErrorMessage(error) {
-    const playerInfoDiv = document.getElementById('playerInfo');
-    let errorMessage = 'An error occurred while fetching player data. ';
-    let debugMessage = '';
-
-    if (error.message.includes('Player not found')) {
-        errorMessage += 'Player not found. Please check the spelling and try again.';
-        debugMessage = 'Player not found in the API response.';
-    } else if (error.message.includes('HTTP error')) {
-        errorMessage += 'The server might be down or experiencing issues. Please try again later.';
-        debugMessage = `HTTP Error: ${error.message}`;
-    } else if (error.message.includes('NetworkError')) {
-        errorMessage += 'There seems to be a problem with your internet connection. Please check your connection and try again.';
-        debugMessage = 'Network error occurred while fetching data.';
-    } else if (error.message.includes('SyntaxError')) {
-        errorMessage += 'The data received from the server was invalid. This might be a temporary issue. Please try again later.';
-        debugMessage = 'Invalid JSON data received from the API.';
-    } else {
-        errorMessage += 'Please try again later or contact support if the problem persists.';
-        debugMessage = `Unexpected error: ${error.message}`;
-    }
-
-    errorMessage += ' Check the debug console for more information.';
-
-    playerInfoDiv.innerHTML = `<p class="error">${errorMessage}</p>`;
-    debugLog(`Error: ${debugMessage}`);
-    debugLog(`Error details: ${error.stack}`);
-}
-
 document.addEventListener('DOMContentLoaded', function() {
+    debugLog('DOMContentLoaded event fired');
     const playerNameInput = document.getElementById('playerName');
     const searchButton = document.getElementById('searchButton');
 
     playerNameInput.addEventListener('keyup', function(event) {
         if (event.key === 'Enter') {
+            debugLog('Enter key pressed in player name input');
             getPlayerInfo();
         }
     });
 
-    searchButton.addEventListener('click', getPlayerInfo);
+    searchButton.addEventListener('click', function() {
+        debugLog('Search button clicked');
+        getPlayerInfo();
+    });
+
+    debugLog('Event listeners added to player name input and search button');
 });
