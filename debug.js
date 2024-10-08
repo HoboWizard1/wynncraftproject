@@ -8,15 +8,13 @@ debugBox.innerHTML = `
             <button onclick="clearDebugBox()">Clear</button>
             <button onclick="copyDebugInfo()">Copy</button>
             <button id="toggleDebugBox">▲</button>
-            <button id="expandDebugBox">⇱</button>
         </div>
     </div>
     <div id="debugContent"></div>
 `;
 document.body.appendChild(debugBox);
 
-let isExpanded = false;
-let isOpen = false;
+let consoleState = 0; // 0: closed, 1: normal, 2: expanded
 
 // Debug logging function
 function debugLog(message) {
@@ -50,46 +48,34 @@ function toggleDebugBox() {
     const debugContent = document.getElementById('debugContent');
     const toggleButton = document.getElementById('toggleDebugBox');
     
-    isOpen = !isOpen;
+    consoleState = (consoleState + 1) % 3;
     
-    if (isOpen) {
-        debugContent.style.display = 'block';
-        debugBox.style.height = isExpanded ? '50vh' : '200px';
-        toggleButton.textContent = '▼';
-    } else {
-        debugContent.style.display = 'none';
-        debugBox.style.height = 'auto';
-        toggleButton.textContent = '▲';
+    switch(consoleState) {
+        case 0: // Closed
+            debugContent.style.display = 'none';
+            debugBox.style.height = 'auto';
+            toggleButton.textContent = '▲';
+            break;
+        case 1: // Normal
+            debugContent.style.display = 'block';
+            debugBox.style.height = '200px';
+            toggleButton.textContent = '▲';
+            break;
+        case 2: // Expanded
+            debugContent.style.display = 'block';
+            debugBox.style.height = '50vh';
+            toggleButton.textContent = '▼';
+            break;
     }
 }
 
-// Expand debug box
-function expandDebugBox() {
-    const debugBox = document.getElementById('debugBox');
-    const expandButton = document.getElementById('expandDebugBox');
-    
-    isExpanded = !isExpanded;
-    
-    if (isExpanded) {
-        debugBox.style.height = '50vh';
-        expandButton.textContent = '⇲';
-        if (!isOpen) {
-            toggleDebugBox();
-        }
-    } else {
-        debugBox.style.height = '200px';
-        expandButton.textContent = '⇱';
-    }
-}
-
-// Add event listeners for toggle and expand buttons
+// Add event listener for toggle button
 document.getElementById('toggleDebugBox').addEventListener('click', toggleDebugBox);
-document.getElementById('expandDebugBox').addEventListener('click', expandDebugBox);
 
 // Override console.error to use debugLog
 console.error = (message) => {
     debugLog(`ERROR: ${message}`);
-    if (!isOpen) {
+    if (consoleState === 0) {
         toggleDebugBox(); // Open debug console on error
     }
 };
