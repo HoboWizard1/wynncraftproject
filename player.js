@@ -1,7 +1,14 @@
-document.getElementById('playerName').addEventListener('keyup', function(event) {
-    if (event.key === 'Enter') {
-        getPlayerInfo();
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    const playerNameInput = document.getElementById('playerName');
+    const searchButton = document.getElementById('searchButton');
+
+    playerNameInput.addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            getPlayerInfo();
+        }
+    });
+
+    searchButton.addEventListener('click', getPlayerInfo);
 });
 
 function debugLog(message) {
