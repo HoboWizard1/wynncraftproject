@@ -56,7 +56,7 @@ button {
 }
 
 .tab button:hover {
-    background-color: #bbb;
+    background-color: rgb(82, 82, 82);
 }
 
 .tab button.active {
