@@ -52,11 +52,11 @@ button {
 }
 
 .tab button:hover {
-    background-color: #ddd;
+    background-color: #bbb;
 }
 
 .tab button.active {
-    background-color: #ccc;
+    background-color: #999;
 }
 
 .tabcontent {
@@ -64,4 +64,22 @@ button {
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+}
+
+#debugConsole {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#debugOutput {
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }

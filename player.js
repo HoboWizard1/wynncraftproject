@@ -3,22 +3,21 @@ async function getPlayerInfo() {
     const playerInfoDiv = document.getElementById('playerInfo');
     playerInfoDiv.innerHTML = 'Loading...';
 
-    console.log(`Attempting to fetch data for player: ${playerName}`);
+    debugLog(`Attempting to fetch data for player: ${playerName}`);
 
     try {
-        // Using the correct API endpoint for full player info
         const apiUrl = `https://api.wynncraft.com/v3/player/${playerName}?fullResult`;
-        console.log(`API URL: ${apiUrl}`);
+        debugLog(`API URL: ${apiUrl}`);
 
         const response = await fetch(apiUrl);
-        console.log(`Response status: ${response.status}`);
+        debugLog(`Response status: ${response.status}`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log('API response:', data);
+        debugLog('API response received');
 
         if (data.username) {
             let infoHTML = `
@@ -42,7 +41,6 @@ async function getPlayerInfo() {
                 `;
             }
 
-            // Add guild information if available
             if (data.guild && data.guild.name) {
                 infoHTML += `
                     <h3>Guild:</h3>
@@ -54,10 +52,10 @@ async function getPlayerInfo() {
             playerInfoDiv.innerHTML = infoHTML;
         } else {
             playerInfoDiv.innerHTML = `Error: Player not found or API returned unexpected data`;
-            console.error('Unexpected API response:', data);
+            debugLog('Unexpected API response: ' + JSON.stringify(data));
         }
     } catch (error) {
-        console.error('Error details:', error);
-        playerInfoDiv.innerHTML = `Error: ${error.message}. Check the console for more details.`;
+        debugLog('Error details: ' + error.message);
+        playerInfoDiv.innerHTML = `Error: ${error.message}. Check the debug console for more details.`;
     }
 }
