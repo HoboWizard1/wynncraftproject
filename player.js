@@ -41,14 +41,16 @@ function displayPlayerInfo(data) {
         const onlineStatus = data.online ? 
             '<span style="color: lightgreen;">Online</span>' : 
             '<span style="color: lightcoral;">Offline</span>';
+        const server = data.server || 'N/A';
 
         playerInfoDiv.innerHTML = `
             <h2>${data.username}</h2>
             <p>Rank: ${data.supportRank || data.rank}</p>
+            <p>Supporter Rank: ${data.supportRank || 'None'}</p>
             <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
             <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
             <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
-            <p>Status: ${onlineStatus}</p>
+            <p>Status: ${onlineStatus} (Server: ${server})</p>
         `;
 
         if (data.guild) {
@@ -58,6 +60,9 @@ function displayPlayerInfo(data) {
                 <p>Rank: ${data.guild.rank}</p>
             `;
         }
+
+        playerInfoDiv.innerHTML += '<h3>Global Data</h3>';
+        playerInfoDiv.innerHTML += generateGlobalData(data);
 
         if (data.characters) {
             playerInfoDiv.innerHTML += '<h3>Characters</h3>';
@@ -79,6 +84,16 @@ function displayPlayerInfo(data) {
         debugLog(`Error in displayPlayerInfo: ${error.message}`);
         playerInfoDiv.innerHTML = `<p class="error">An error occurred while displaying player information. Please try again later.</p>`;
     }
+}
+
+function generateGlobalData(data) {
+    let globalData = '';
+    for (const [key, value] of Object.entries(data)) {
+        if (typeof value !== 'object' && key !== 'username' && key !== 'rank' && key !== 'supportRank' && key !== 'firstJoin' && key !== 'lastJoin' && key !== 'playtime' && key !== 'online' && key !== 'server') {
+            globalData += `<p><strong>${key}:</strong> ${value}</p>`;
+        }
+    }
+    return globalData;
 }
 
 function generateCharacterDetails(character) {
