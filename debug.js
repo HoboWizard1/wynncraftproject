@@ -9,6 +9,8 @@ function debugLog(message) {
     const logEntry = document.createElement('div');
     logEntry.textContent = `[${timestamp}] ${message}`;
     debugOutput.appendChild(logEntry);
+    
+    // Auto-scroll to the bottom
     debugOutput.scrollTop = debugOutput.scrollHeight;
 }
 
