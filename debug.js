@@ -17,6 +17,15 @@ document.body.appendChild(debugBox);
 
 let consoleState = 0; // 0: closed, 1: normal, 2: expanded
 
+// Initialize debug console in closed state
+function initDebugConsole() {
+    const debugBox = document.getElementById('debugBox');
+    const debugContent = document.getElementById('debugContent');
+    debugContent.style.display = 'none';
+    debugBox.style.height = 'auto';
+    consoleState = 0;
+}
+
 // Debug logging function
 function debugLog(message) {
     const debugContent = document.getElementById('debugContent');
@@ -92,5 +101,5 @@ console.error = (message) => {
     }
 };
 
-// Initialize debug console
-debugLog('Debug console initialized');
+// Initialize debug console when the page loads
+document.addEventListener('DOMContentLoaded', initDebugConsole);

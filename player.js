@@ -153,6 +153,18 @@ function displayErrorMessage(error) {
     debugLog(`Error details: ${error.stack}`);
 }
 
+function debugLog(message) {
+    const debugContent = document.getElementById('debugContent');
+    const timestamp = new Date().toLocaleTimeString();
+    debugContent.innerHTML += `[${timestamp}] ${message}\n`;
+    debugContent.scrollTop = debugContent.scrollHeight;
+    
+    // Ensure the console is visible when logging
+    if (consoleState === 0) {
+        moveDebugBoxUp();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     debugLog('DOMContentLoaded event fired');
     const playerNameInput = document.getElementById('playerName');
