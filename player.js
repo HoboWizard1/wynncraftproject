@@ -7,8 +7,6 @@ document.getElementById('playerName').addEventListener('keyup', function(event) 
 async function getPlayerInfo() {
     const playerName = document.getElementById('playerName').value;
     const playerInfoDiv = document.getElementById('playerInfo');
-    const globalInfoDiv = document.getElementById('globalInfo');
-    const charactersDiv = document.getElementById('characters');
     playerInfoDiv.innerHTML = 'Loading...';
 
     try {
@@ -19,8 +17,14 @@ async function getPlayerInfo() {
         const data = await response.json();
 
         if (data.username) {
-            playerInfoDiv.innerHTML = '';
-            document.getElementById('playerNameDisplay').textContent = data.username;
+            playerInfoDiv.innerHTML = `
+                <h2 id="playerNameDisplay">${data.username}</h2>
+                <div id="globalInfo"></div>
+                <div id="characters"></div>
+            `;
+
+            const globalInfoDiv = document.getElementById('globalInfo');
+            const charactersDiv = document.getElementById('characters');
 
             // Display global player information
             globalInfoDiv.innerHTML = '<h3>Global Information</h3>';
