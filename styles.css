@@ -112,10 +112,34 @@ button {
     right: 10px;
     width: 360px; /* Increased by 20% from 300px */
     max-height: 240px; /* Increased by 20% from 200px */
-    overflow-y: auto;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #333;
     padding: 10px;
+    font-family: monospace;
+    font-size: 12px;
+    overflow-y: auto;
+}
+
+#debugConsole {
+    margin-bottom: 10px;
+}
+
+#debugButtons {
+    display: flex;
+    justify-content: space-between;
+}
+
+#debugButtons button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#debugButtons button:hover {
+    background-color: #555;
 }
 
 /* Remove the #debugButtons styles as they're no longer needed */
