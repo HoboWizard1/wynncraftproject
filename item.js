@@ -3,42 +3,56 @@ async function getItemInfo() {
     const itemInfoDiv = document.getElementById('itemInfo');
     itemInfoDiv.innerHTML = 'Loading...';
 
-    debugLog(`Attempting to fetch data for item: ${itemName}`);
+    debugLog(`Fetching item info for: ${itemName}`);
 
     try {
-        const apiUrl = `https://api.wynncraft.com/v3/item/search/${itemName}`;
+        // Replace this with the actual Wynncraft item API endpoint
+        const apiUrl = `https://api.wynncraft.com/v3/item/${encodeURIComponent(itemName)}`;
+        
         debugLog(`API URL: ${apiUrl}`);
 
         const response = await fetch(apiUrl);
         debugLog(`Response status: ${response.status}`);
-
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+        
         const data = await response.json();
         debugLog('API response received');
-        debugLog(JSON.stringify(data, null, 2));
 
-        if (data.length > 0) {
-            let infoHTML = '<h2>Search Results:</h2>';
-            data.forEach(item => {
-                infoHTML += `
-                    <div>
-                        <h3>${item.name}</h3>
-                        <p>Type: ${item.type}</p>
-                        <p>Tier: ${item.tier}</p>
-                        <p>Level: ${item.level}</p>
-                    </div>
-                `;
-            });
-            itemInfoDiv.innerHTML = infoHTML;
+        if (data.name) {
+            displayItemInfo(data);
         } else {
-            itemInfoDiv.innerHTML = `No items found matching "${itemName}"`;
+            itemInfoDiv.innerHTML = `<p class="error">Item "${itemName}" not found. Please check the spelling and try again.</p>`;
+            debugLog(`Item "${itemName}" not found`);
         }
     } catch (error) {
-        debugLog(`Error details: ${error.message}`);
-        debugLog(`Error stack: ${error.stack}`);
-        itemInfoDiv.innerHTML = `Error: ${error.message}. Check the debug console for more details.`;
+        console.error('Error:', error);
+        displayErrorMessage(error);
     }
+}
+
+function displayItemInfo(item) {
+    // Implement this function to display item information
+    debugLog('Displaying item information');
+    // ...
+}
+
+function displayErrorMessage(error) {
+    const itemInfoDiv = document.getElementById('itemInfo');
+    let errorMessage = 'An error occurred while fetching item data. ';
+
+    if (error.message.includes('HTTP error')) {
+        errorMessage += 'The server might be down or experiencing issues. Please try again later.';
+    } else if (error.message.includes('NetworkError')) {
+        errorMessage += 'There seems to be a problem with your internet connection. Please check your connection and try again.';
+    } else if (error.message.includes('SyntaxError')) {
+        errorMessage += 'The data received from the server was invalid. This might be a temporary issue. Please try again later.';
+    } else {
+        errorMessage += 'Please try again later or contact support if the problem persists.';
+    }
+
+    itemInfoDiv.innerHTML = `<p class="error">${errorMessage}</p>`;
+    debugLog(`Error: ${errorMessage}`);
 }

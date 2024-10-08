@@ -103,3 +103,52 @@ button {
     margin-top: 10px;
     border-radius: 5px;
 }
+
+/* Debug box styles */
+#debugBox {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background-color: #000;
+    color: #fff;
+    font-family: monospace;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+#debugHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: #333;
+}
+
+#debugHeader h3 {
+    margin: 0;
+}
+
+#debugHeader button {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#debugHeader button:hover {
+    background-color: #777;
+}
+
+#debugContent {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}

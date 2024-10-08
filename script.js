@@ -12,4 +12,32 @@ function openTab(evt, tabName) {
     evt.currentTarget.className += " active";
 }
 
-// Add any other necessary functions here, but remove debug-related functions
+function debugLog(message) {
+    const debugContent = document.getElementById('debugContent');
+    const timestamp = new Date().toLocaleTimeString();
+    debugContent.innerHTML += `[${timestamp}] ${message}\n`;
+    debugContent.scrollTop = debugContent.scrollHeight;
+}
+
+function clearDebugBox() {
+    document.getElementById('debugContent').innerHTML = '';
+    debugLog('Debug console cleared');
+}
+
+function copyDebugInfo() {
+    const debugContent = document.getElementById('debugContent');
+    const textArea = document.createElement('textarea');
+    textArea.value = debugContent.innerText;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    debugLog('Debug information copied to clipboard');
+}
+
+// Override console.log and console.error to use debugLog
+console.log = debugLog;
+console.error = (message) => debugLog(`ERROR: ${message}`);
+
+// Initialize debug console
+debugLog('Debug console initialized');
