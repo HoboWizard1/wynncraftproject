@@ -6,7 +6,7 @@ async function getItemInfo() {
     debugLog(`Attempting to fetch data for item: ${itemName}`);
 
     try {
-        const apiUrl = `https://api.wynncraft.com/v3/item/search/${encodeURIComponent(itemName)}`;
+        const apiUrl = `https://api.wynncraft.com/v3/item/search/${itemName}`;
         debugLog(`API URL: ${apiUrl}`);
 
         const response = await fetch(apiUrl);
@@ -17,32 +17,28 @@ async function getItemInfo() {
         }
 
         const data = await response.json();
-        debugLog('API response:', data);
+        debugLog('API response received');
+        debugLog(JSON.stringify(data, null, 2));
 
-        if (data.data && data.data.length > 0) {
-            const itemData = data.data[0];
-            let infoHTML = `
-                <h2>${itemData.name}</h2>
-                <p>Type: ${itemData.type}</p>
-                <p>Tier: ${itemData.tier}</p>
-                <p>Level: ${itemData.level}</p>
-                <h3>Requirements:</h3>
-                <ul>
-                    ${Object.entries(itemData.requirements).map(([key, value]) => `<li>${key}: ${value}</li>`).join('')}
-                </ul>
-                <h3>Identifications:</h3>
-                <ul>
-                    ${Object.entries(itemData.identifications).map(([key, value]) => `<li>${key}: ${value.min} to ${value.max}</li>`).join('')}
-                </ul>
-            `;
-
+        if (data.length > 0) {
+            let infoHTML = '<h2>Search Results:</h2>';
+            data.forEach(item => {
+                infoHTML += `
+                    <div>
+                        <h3>${item.name}</h3>
+                        <p>Type: ${item.type}</p>
+                        <p>Tier: ${item.tier}</p>
+                        <p>Level: ${item.level}</p>
+                    </div>
+                `;
+            });
             itemInfoDiv.innerHTML = infoHTML;
         } else {
-            itemInfoDiv.innerHTML = `Error: Item not found or API returned unexpected data`;
-            debugLog('Unexpected API response:', data);
+            itemInfoDiv.innerHTML = `No items found matching "${itemName}"`;
         }
     } catch (error) {
-        debugLog('Error details:', error);
+        debugLog(`Error details: ${error.message}`);
+        debugLog(`Error stack: ${error.stack}`);
         itemInfoDiv.innerHTML = `Error: ${error.message}. Check the debug console for more details.`;
     }
 }

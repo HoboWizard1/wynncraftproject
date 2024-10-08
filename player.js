@@ -4,21 +4,13 @@ async function getPlayerInfo() {
     playerInfoDiv.innerHTML = 'Loading...';
 
     debugLog(`Attempting to fetch data for player: ${playerName}`);
-    debugLog(`User agent: ${navigator.userAgent}`);
-    debugLog(`Current page URL: ${window.location.href}`);
 
     try {
-        // Use a different CORS proxy
-        const corsProxy = 'https://api.allorigins.win/raw?url=';
-        const apiUrl = `${corsProxy}${encodeURIComponent(`https://api.wynncraft.com/v3/player/${playerName}?fullResult`)}`;
-        debugLog(`API URL (with CORS proxy): ${apiUrl}`);
+        const apiUrl = `https://api.wynncraft.com/v3/player/${playerName}?fullResult`;
+        debugLog(`API URL: ${apiUrl}`);
 
-        const startTime = performance.now();
         const response = await fetch(apiUrl);
-        const endTime = performance.now();
-        
         debugLog(`Response status: ${response.status}`);
-        debugLog(`Response time: ${(endTime - startTime).toFixed(2)}ms`);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -26,7 +18,7 @@ async function getPlayerInfo() {
 
         const data = await response.json();
         debugLog('API response received');
-        debugLog(`Response body: ${JSON.stringify(data, null, 2)}`);
+        debugLog(JSON.stringify(data, null, 2));
 
         if (data.username) {
             let infoHTML = `
@@ -43,7 +35,7 @@ async function getPlayerInfo() {
                     <div>
                         <h4>${character.type}</h4>
                         <p>Level: ${character.level}</p>
-                        <p>Combat Level: ${character.combatLevel.total}</p>
+                        <p>Total Level: ${character.totalLevel}</p>
                     </div>
                 `;
             }
@@ -62,28 +54,8 @@ async function getPlayerInfo() {
             debugLog('Unexpected API response: ' + JSON.stringify(data, null, 2));
         }
     } catch (error) {
-        debugLog(`Error name: ${error.name}`);
-        debugLog(`Error message: ${error.message}`);
+        debugLog(`Error details: ${error.message}`);
         debugLog(`Error stack: ${error.stack}`);
         playerInfoDiv.innerHTML = `Error: ${error.message}. Check the debug console for more details.`;
-        
-        if (error.name === 'TypeError') {
-            debugLog('This might be a CORS or network connectivity issue.');
-            debugLog(`Origin: ${window.location.origin}`);
-            debugLog(`Protocol: ${window.location.protocol}`);
-        }
-
-        if (error.name === 'SyntaxError') {
-            debugLog('This might be an issue with parsing the JSON response.');
-        }
-
-        debugLog('Network information:');
-        if (navigator.connection) {
-            debugLog(`Downlink: ${navigator.connection.downlink} Mbps`);
-            debugLog(`Effective type: ${navigator.connection.effectiveType}`);
-            debugLog(`Round-trip time: ${navigator.connection.rtt} ms`);
-        } else {
-            debugLog('Network information not available');
-        }
     }
 }
