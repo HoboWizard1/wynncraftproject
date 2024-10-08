@@ -11,20 +11,11 @@ debugBox.innerHTML = `
             <button id="debugBoxDown">▼</button>
         </div>
     </div>
-    <div id="debugContent"></div>
+    <div id="debugContent" style="display: none;"></div>
 `;
 document.body.appendChild(debugBox);
 
 let consoleState = 0; // 0: closed, 1: normal, 2: expanded
-
-// Initialize debug console in closed state
-function initDebugConsole() {
-    const debugBox = document.getElementById('debugBox');
-    const debugContent = document.getElementById('debugContent');
-    debugContent.style.display = 'none';
-    debugBox.style.height = 'auto';
-    consoleState = 0;
-}
 
 // Debug logging function
 function debugLog(message) {
@@ -96,10 +87,7 @@ document.getElementById('debugBoxDown').addEventListener('click', moveDebugBoxDo
 // Override console.error to use debugLog
 console.error = (message) => {
     debugLog(`ERROR: ${message}`);
-    if (consoleState === 0) {
-        moveDebugBoxUp(); // Open debug console on error
-    }
 };
 
-// Initialize debug console when the page loads
-document.addEventListener('DOMContentLoaded', initDebugConsole);
+// Initialize debug console
+debugLog('Debug console initialized');
