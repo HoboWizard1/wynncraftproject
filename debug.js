@@ -6,9 +6,9 @@ debugBox.innerHTML = `
         <h3>Debug Console</h3>
         <button onclick="clearDebugBox()">Clear</button>
         <button onclick="copyDebugInfo()">Copy</button>
-        <button id="toggleDebugBox">▼</button>
+        <button id="toggleDebugBox">▲</button>
     </div>
-    <div id="debugContent"></div>
+    <div id="debugContent" style="display: none;"></div>
 `;
 document.body.appendChild(debugBox);
 
@@ -23,7 +23,6 @@ function debugLog(message) {
 // Clear debug box
 function clearDebugBox() {
     document.getElementById('debugContent').innerHTML = '';
-    debugLog('Debug console cleared');
 }
 
 // Copy debug info
@@ -58,9 +57,10 @@ function toggleDebugBox() {
 // Add event listener for toggle button
 document.getElementById('toggleDebugBox').addEventListener('click', toggleDebugBox);
 
-// Override console.log and console.error to use debugLog
-console.log = debugLog;
-console.error = (message) => debugLog(`ERROR: ${message}`);
+// Override console.error to use debugLog
+console.error = (message) => {
+    debugLog(`ERROR: ${message}`);
+    toggleDebugBox(); // Open debug console on error
+};
 
-// Initialize debug console
-debugLog('Debug console initialized');
+// Don't log anything on initialization
