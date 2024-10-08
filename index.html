@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wynncraft Info Lookup</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="version.js"></script>
 </head>
 <body>
+    <div id="versionDisplay"></div>
     <div class="container">
         <h1>Wynncraft Info Lookup</h1>
         <div class="tab">
@@ -33,5 +35,8 @@
     <script src="script.js"></script>
     <script src="player.js"></script>
     <script src="item.js"></script>
+    <script>
+        document.getElementById('versionDisplay').textContent = `v${window.appVersion}`;
+    </script>
 </body>
 </html>

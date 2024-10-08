@@ -8,11 +8,17 @@ async function getPlayerInfo() {
     debugLog(`Current page URL: ${window.location.href}`);
 
     try {
-        const apiUrl = `https://api.wynncraft.com/v3/player/${playerName}?fullResult`;
-        debugLog(`API URL: ${apiUrl}`);
+        // Use a CORS proxy
+        const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+        const apiUrl = `${corsProxy}https://api.wynncraft.com/v3/player/${playerName}?fullResult`;
+        debugLog(`API URL (with CORS proxy): ${apiUrl}`);
 
         const startTime = performance.now();
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+            headers: {
+                'Origin': 'https://hobowizard1.github.io'
+            }
+        });
         const endTime = performance.now();
         
         debugLog(`Response status: ${response.status}`);
@@ -27,33 +33,32 @@ async function getPlayerInfo() {
         debugLog('API response received');
         debugLog(`Response body: ${JSON.stringify(data, null, 2)}`);
 
-        if (data.username) {
+        if (data.data && data.data.length > 0) {
+            const playerData = data.data[0];
             let infoHTML = `
-                <h2>${data.username}</h2>
-                <p>Rank: ${data.rank}</p>
-                <p>Online: ${data.online ? 'Yes' : 'No'}</p>
-                <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
-                <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
-                <p>Playtime: ${Math.round(data.playtime / 60)} hours</p>
+                <h2>${playerData.username}</h2>
+                <p>Rank: ${playerData.rank}</p>
+                <p>First Join: ${new Date(playerData.firstJoin).toLocaleString()}</p>
+                <p>Last Join: ${new Date(playerData.lastJoin).toLocaleString()}</p>
+                <p>Playtime: ${Math.round(playerData.playtime / 60)} hours</p>
                 <h3>Characters:</h3>
             `;
 
-            for (const [characterUuid, character] of Object.entries(data.characters)) {
+            for (const character of playerData.characters) {
                 infoHTML += `
                     <div>
-                        <h4>${character.nickname || character.type} (${character.type})</h4>
+                        <h4>${character.type}</h4>
                         <p>Level: ${character.level}</p>
-                        <p>Total Level: ${character.totalLevel}</p>
                         <p>Combat Level: ${character.combatLevel.total}</p>
                     </div>
                 `;
             }
 
-            if (data.guild && data.guild.name) {
+            if (playerData.guild && playerData.guild.name) {
                 infoHTML += `
                     <h3>Guild:</h3>
-                    <p>Name: ${data.guild.name}</p>
-                    <p>Rank: ${data.guild.rank}</p>
+                    <p>Name: ${playerData.guild.name}</p>
+                    <p>Rank: ${playerData.guild.rank}</p>
                 `;
             }
 
@@ -82,6 +87,9 @@ async function getPlayerInfo() {
         if (navigator.connection) {
             debugLog(`Downlink: ${navigator.connection.downlink} Mbps`);
             debugLog(`Effective type: ${navigator.connection.effectiveType}`);
+            debugLog(`Round-trip time: ${navigator.connection.rtt} ms`);
+        } else {
+            debugLog('Network information not available');
         }
     }
 }
