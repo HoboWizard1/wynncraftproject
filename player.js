@@ -30,7 +30,7 @@ async function getPlayerInfo() {
         }
     } catch (error) {
         console.error('Error:', error);
-        displayErrorMessage(error);
+        displayErrorMessage(error, playerName);
     }
 }
 
@@ -129,24 +129,22 @@ function toggleCharacter(charId) {
     }
 }
 
-function displayErrorMessage(error) {
+function displayErrorMessage(error, playerName) {
     debugLog('Displaying error message');
     const playerInfoDiv = document.getElementById('playerInfo');
-    let errorMessage = 'An error occurred while fetching player data. ';
+    let errorMessage = '';
 
     if (error.message.includes('Player not found')) {
-        errorMessage += 'Player not found. Please check the spelling and try again.';
+        errorMessage = `Couldn't find user "${playerName}". Please check the spelling or check the debug console if you think this is an error.`;
     } else if (error.message.includes('HTTP error')) {
-        errorMessage += 'The server might be down or experiencing issues. Please try again later.';
+        errorMessage = 'The server might be down or experiencing issues. Please try again later or check the debug console for more information.';
     } else if (error.message.includes('NetworkError')) {
-        errorMessage += 'There seems to be a problem with your internet connection. Please check your connection and try again.';
+        errorMessage = 'There seems to be a problem with your internet connection. Please check your connection and try again.';
     } else if (error.message.includes('SyntaxError')) {
-        errorMessage += 'The data received from the server was invalid. This might be a temporary issue. Please try again later.';
+        errorMessage = 'The data received from the server was invalid. This might be a temporary issue. Please try again later or check the debug console for more information.';
     } else {
-        errorMessage += 'Please try again later or contact support if the problem persists.';
+        errorMessage = 'An unexpected error occurred. Please try again later or check the debug console for more information.';
     }
-
-    errorMessage += ' Check the debug console for more information.';
 
     playerInfoDiv.innerHTML = `<p class="error">${errorMessage}</p>`;
     debugLog(`Error message displayed: ${errorMessage}`);
