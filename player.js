@@ -44,7 +44,7 @@ function displayPlayerInfo(data) {
 
         playerInfoDiv.innerHTML = `
             <h2>${data.username}</h2>
-            <p>Rank: ${data.rank}</p>
+            <p>Rank: ${data.supportRank || data.rank}</p>
             <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
             <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
             <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
@@ -81,30 +81,6 @@ function displayPlayerInfo(data) {
     }
 }
 
-function displayErrorMessage(error) {
-    debugLog('Displaying error message');
-    const playerInfoDiv = document.getElementById('playerInfo');
-    let errorMessage = 'An error occurred while fetching player data. ';
-
-    if (error.message.includes('Player not found')) {
-        errorMessage += 'Player not found. Please check the spelling and try again.';
-    } else if (error.message.includes('HTTP error')) {
-        errorMessage += 'The server might be down or experiencing issues. Please try again later.';
-    } else if (error.message.includes('NetworkError')) {
-        errorMessage += 'There seems to be a problem with your internet connection. Please check your connection and try again.';
-    } else if (error.message.includes('SyntaxError')) {
-        errorMessage += 'The data received from the server was invalid. This might be a temporary issue. Please try again later.';
-    } else {
-        errorMessage += 'Please try again later or contact support if the problem persists.';
-    }
-
-    errorMessage += ' Check the debug console for more information.';
-
-    playerInfoDiv.innerHTML = `<p class="error">${errorMessage}</p>`;
-    debugLog(`Error message displayed: ${errorMessage}`);
-    debugLog(`Error details: ${error.stack}`);
-}
-
 function generateCharacterDetails(character) {
     try {
         let details = '';
@@ -136,6 +112,30 @@ function toggleCharacter(charId) {
         console.error(`Character details element not found for ID: ${charId}`);
         debugLog(`Error: Character details element not found for ID: ${charId}`);
     }
+}
+
+function displayErrorMessage(error) {
+    debugLog('Displaying error message');
+    const playerInfoDiv = document.getElementById('playerInfo');
+    let errorMessage = 'An error occurred while fetching player data. ';
+
+    if (error.message.includes('Player not found')) {
+        errorMessage += 'Player not found. Please check the spelling and try again.';
+    } else if (error.message.includes('HTTP error')) {
+        errorMessage += 'The server might be down or experiencing issues. Please try again later.';
+    } else if (error.message.includes('NetworkError')) {
+        errorMessage += 'There seems to be a problem with your internet connection. Please check your connection and try again.';
+    } else if (error.message.includes('SyntaxError')) {
+        errorMessage += 'The data received from the server was invalid. This might be a temporary issue. Please try again later.';
+    } else {
+        errorMessage += 'Please try again later or contact support if the problem persists.';
+    }
+
+    errorMessage += ' Check the debug console for more information.';
+
+    playerInfoDiv.innerHTML = `<p class="error">${errorMessage}</p>`;
+    debugLog(`Error message displayed: ${errorMessage}`);
+    debugLog(`Error details: ${error.stack}`);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
