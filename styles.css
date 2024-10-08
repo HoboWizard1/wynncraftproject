@@ -21,7 +21,7 @@ input[type="text"] {
 
 button {
     padding: 10px 15px;
-    background-color: #333;
+    background-color: #000000;
     color: #fff;
     border: none;
     cursor: pointer;
@@ -57,7 +57,7 @@ button {
 }
 
 .tab button.active {
-    background-color: #999;
+    background-color: #000000;
 }
 
 .tabcontent {
@@ -71,8 +71,8 @@ button {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 300px;
-    height: 350px; /* Increased from 200px to 300px (50% taller) */
+    width: 325px;
+    height: 400px; /* Increased from 200px to 300px (50% taller) */
     background-color: #000;
     color: #fff;
     padding: 10px;
@@ -110,29 +110,23 @@ button {
     position: fixed;
     bottom: 10px;
     right: 10px;
-    width: 300px;
-    max-height: 200px;
+    width: 360px; /* Increased by 20% from 300px */
+    max-height: 240px; /* Increased by 20% from 200px */
     overflow-y: auto;
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     padding: 10px;
 }
 
-#debugButtons {
-    margin-top: 10px;
+/* Remove the #debugButtons styles as they're no longer needed */
+
+#searchContainer {
+    margin-bottom: 20px;
 }
 
-#debugButtons button {
-    margin-right: 5px;
-    padding: 5px 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-#debugButtons button:hover {
-    background-color: #45a049;
+#playerName {
+    padding: 5px;
+    font-size: 16px;
 }
 
 .character h4 {
@@ -147,7 +141,13 @@ button {
 }
 
 .characterDetails {
+    display: none;
     padding: 10px;
     border: 1px solid #ccc;
     margin-bottom: 10px;
+}
+
+#debugConsoleContainer button {
+    margin-top: 10px;
+    margin-right: 5px;
 }

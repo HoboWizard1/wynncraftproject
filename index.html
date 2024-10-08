@@ -18,10 +18,12 @@
 
         <div id="PlayerInfo" class="tabcontent" style="display:block;">
             <h2>Player Information</h2>
-            <input type="text" id="playerName" placeholder="Enter player name">
-            <button onclick="getPlayerInfo()">Get Player Info</button>
+            <div id="searchContainer">
+                <input type="text" id="playerName" placeholder="Enter player name">
+                <button onclick="getPlayerInfo()">Search</button>
+            </div>
             <div id="playerInfo">
-                <h2 id="playerName"></h2>
+                <h2 id="playerNameDisplay"></h2>
                 <div id="globalInfo"></div>
                 <div id="characters"></div>
             </div>
@@ -38,10 +40,8 @@
     <div id="debugConsoleContainer">
         <h3>Debug Console</h3>
         <div id="debugConsole"></div>
-        <div id="debugButtons">
-            <button onclick="clearDebugConsole()">Clear Console</button>
-            <button onclick="copyDebugToClipboard()">Copy Debug Log</button>
-        </div>
+        <button onclick="clearDebugConsole()">Clear Console</button>
+        <button onclick="copyDebugToClipboard()">Copy Debug Log</button>
     </div>
     
     <script src="debug.js"></script>

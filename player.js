@@ -1,3 +1,9 @@
+document.getElementById('playerName').addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        getPlayerInfo();
+    }
+});
+
 async function getPlayerInfo() {
     const playerName = document.getElementById('playerName').value;
     const playerInfoDiv = document.getElementById('playerInfo');
@@ -14,17 +20,15 @@ async function getPlayerInfo() {
 
         if (data.username) {
             playerInfoDiv.innerHTML = '';
-            document.getElementById('playerName').textContent = data.username;
+            document.getElementById('playerNameDisplay').textContent = data.username;
 
             // Display global player information
-            globalInfoDiv.innerHTML = `
-                <h3>Global Information</h3>
-                <p>Rank: ${data.rank}</p>
-                <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
-                <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
-                <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
-                <!-- Add more global information here -->
-            `;
+            globalInfoDiv.innerHTML = '<h3>Global Information</h3>';
+            for (const [key, value] of Object.entries(data)) {
+                if (typeof value !== 'object') {
+                    globalInfoDiv.innerHTML += `<p><strong>${key}:</strong> ${value}</p>`;
+                }
+            }
 
             // Display character information
             charactersDiv.innerHTML = '<h3>Characters</h3>';
@@ -33,12 +37,8 @@ async function getPlayerInfo() {
                 charDiv.className = 'character';
                 charDiv.innerHTML = `
                     <h4 onclick="toggleCharacter('${charId}')">${character.type} (Level ${character.level})</h4>
-                    <div id="${charId}" class="characterDetails" style="display: none;">
-                        <p>Nickname: ${character.nickname || 'None'}</p>
-                        <p>XP: ${character.xp} (${character.xpPercent}%)</p>
-                        <p>Total Level: ${character.totalLevel}</p>
-                        <p>Playtime: ${character.playtime.toFixed(2)} hours</p>
-                        <!-- Add more character details here -->
+                    <div id="${charId}" class="characterDetails">
+                        ${generateCharacterDetails(character)}
                     </div>
                 `;
                 charactersDiv.appendChild(charDiv);
@@ -51,6 +51,23 @@ async function getPlayerInfo() {
         playerInfoDiv.innerHTML = 'Error fetching player data';
         debugLog(`Error: ${error.message}`);
     }
+}
+
+function generateCharacterDetails(character) {
+    let details = '';
+    for (const [key, value] of Object.entries(character)) {
+        if (typeof value === 'object') {
+            details += `<p><strong>${key}:</strong></p>`;
+            details += '<ul>';
+            for (const [subKey, subValue] of Object.entries(value)) {
+                details += `<li><strong>${subKey}:</strong> ${JSON.stringify(subValue)}</li>`;
+            }
+            details += '</ul>';
+        } else {
+            details += `<p><strong>${key}:</strong> ${value}</p>`;
+        }
+    }
+    return details;
 }
 
 function toggleCharacter(charId) {
