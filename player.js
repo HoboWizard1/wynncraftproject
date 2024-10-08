@@ -6,28 +6,22 @@ async function getPlayerInfo() {
     debugLog(`Attempting to fetch data for player: ${playerName}`);
 
     try {
-        debugLog(`User agent: ${navigator.userAgent}`);
-        debugLog(`Current page URL: ${window.location.href}`);
-
         const corsProxy = 'https://api.allorigins.win/raw?url=';
         const apiUrl = `${corsProxy}${encodeURIComponent(`https://api.wynncraft.com/v3/player/${playerName}?fullResult`)}`;
         
-        debugLog(`API URL (with CORS proxy): ${apiUrl}`);
+        debugLog(`API URL: ${apiUrl}`);
 
-        const startTime = performance.now();
         const response = await fetch(apiUrl);
-        const endTime = performance.now();
-        
         debugLog(`Response status: ${response.status}`);
-        debugLog(`Response time: ${(endTime - startTime).toFixed(2)}ms`);
-
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        debugLog('API response received');
         const data = await response.json();
-        debugLog('Response body: ' + JSON.stringify(data).substring(0, 500) + '...');
+        debugLog('API response received');
+        debugLog('Full API Response:');
+        debugLog(JSON.stringify(data, null, 2));
 
         if (data.username) {
             displayPlayerInfo(data);
@@ -44,12 +38,17 @@ function displayPlayerInfo(data) {
     debugLog('Displaying player information');
     const playerInfoDiv = document.getElementById('playerInfo');
     try {
+        const onlineStatus = data.online ? 
+            '<span style="color: lightgreen;">Online</span>' : 
+            '<span style="color: lightcoral;">Offline</span>';
+
         playerInfoDiv.innerHTML = `
             <h2>${data.username}</h2>
             <p>Rank: ${data.rank}</p>
             <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
             <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
             <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
+            <p>Status: ${onlineStatus}</p>
         `;
 
         if (data.guild) {
