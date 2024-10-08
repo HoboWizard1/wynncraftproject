@@ -11,7 +11,7 @@ debugBox.innerHTML = `
             <button id="debugBoxDown">▼</button>
         </div>
     </div>
-    <div id="debugContent" style="display: none;"></div>
+    <pre id="debugContent" style="display: none;"></pre>
 `;
 document.body.appendChild(debugBox);
 
@@ -21,13 +21,14 @@ let consoleState = 0; // 0: closed, 1: normal, 2: expanded
 function debugLog(message) {
     const debugContent = document.getElementById('debugContent');
     const timestamp = new Date().toLocaleTimeString();
-    debugContent.innerHTML += `[${timestamp}] ${message}\n`;
+    const formattedMessage = `[${timestamp}] ${message}\n`;
+    debugContent.textContent += formattedMessage;
     debugContent.scrollTop = debugContent.scrollHeight;
 }
 
 // Clear debug box
 function clearDebugBox() {
-    document.getElementById('debugContent').innerHTML = '';
+    document.getElementById('debugContent').textContent = '';
     debugLog('Debug console cleared');
 }
 
@@ -35,7 +36,7 @@ function clearDebugBox() {
 function copyDebugInfo() {
     const debugContent = document.getElementById('debugContent');
     const textArea = document.createElement('textarea');
-    textArea.value = debugContent.innerText;
+    textArea.value = debugContent.textContent;
     document.body.appendChild(textArea);
     textArea.select();
     document.execCommand('copy');

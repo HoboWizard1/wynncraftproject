@@ -162,9 +162,14 @@ button {
 }
 
 #debugContent {
-    display: none;
-    padding: 10px;
-    max-height: calc(50vh - 40px);
-    overflow-y: auto;
+    white-space: pre-wrap;
     word-wrap: break-word;
+    font-family: monospace;
+    font-size: 12px;
+    padding: 10px;
+    margin: 0;
+    overflow-y: auto;
+    max-height: calc(100% - 40px); /* Subtract header height */
+    background-color: #000;
+    color: #fff;
 }
