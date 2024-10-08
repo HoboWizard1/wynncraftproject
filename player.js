@@ -25,12 +25,11 @@ async function getPlayerInfo() {
         if (data.username) {
             displayPlayerInfo(data);
         } else {
-            playerInfoDiv.innerHTML = `<p class="error">Player "${playerName}" not found. Please check the spelling and try again.</p>`;
-            debugLog(`Player "${playerName}" not found`);
+            throw new Error('Player not found');
         }
     } catch (error) {
         console.error('Error:', error);
-        playerInfoDiv.innerHTML = `<p class="error">An error occurred while fetching player data. Please try again later.</p>`;
+        displayErrorMessage(error);
     }
 }
 
@@ -87,6 +86,35 @@ function generateCharacterDetails(character) {
 function toggleCharacter(charId) {
     const charDetails = document.getElementById(charId);
     charDetails.style.display = charDetails.style.display === 'none' ? 'block' : 'none';
+}
+
+function displayErrorMessage(error) {
+    const playerInfoDiv = document.getElementById('playerInfo');
+    let errorMessage = 'An error occurred while fetching player data. ';
+    let debugMessage = '';
+
+    if (error.message.includes('Player not found')) {
+        errorMessage += 'Player not found. Please check the spelling and try again.';
+        debugMessage = 'Player not found in the API response.';
+    } else if (error.message.includes('HTTP error')) {
+        errorMessage += 'The server might be down or experiencing issues. Please try again later.';
+        debugMessage = `HTTP Error: ${error.message}`;
+    } else if (error.message.includes('NetworkError')) {
+        errorMessage += 'There seems to be a problem with your internet connection. Please check your connection and try again.';
+        debugMessage = 'Network error occurred while fetching data.';
+    } else if (error.message.includes('SyntaxError')) {
+        errorMessage += 'The data received from the server was invalid. This might be a temporary issue. Please try again later.';
+        debugMessage = 'Invalid JSON data received from the API.';
+    } else {
+        errorMessage += 'Please try again later or contact support if the problem persists.';
+        debugMessage = `Unexpected error: ${error.message}`;
+    }
+
+    errorMessage += ' Check the debug console for more information.';
+
+    playerInfoDiv.innerHTML = `<p class="error">${errorMessage}</p>`;
+    debugLog(`Error: ${debugMessage}`);
+    debugLog(`Error details: ${error.stack}`);
 }
 
 document.addEventListener('DOMContentLoaded', function() {

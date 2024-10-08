@@ -95,12 +95,13 @@ button {
 
 /* Add this to your existing styles */
 .error {
-    color: #d8000c;
-    background-color: #ffbaba;
-    border: 1px solid #d8000c;
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
     padding: 10px;
-    margin-top: 10px;
-    border-radius: 5px;
+    margin: 10px 0;
+    border-radius: 4px;
+    font-weight: bold;
 }
 
 /* Debug box styles */
