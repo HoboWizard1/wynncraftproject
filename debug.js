@@ -101,3 +101,5 @@ debugLog('Debug console initialized');
 
 // Add this event listener
 window.addEventListener('resize', updateDebugBoxState);
+
+console.log('Debug.js loaded');

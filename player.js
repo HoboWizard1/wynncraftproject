@@ -1,4 +1,5 @@
 async function getPlayerInfo() {
+    debugLog('getPlayerInfo function called');
     const playerName = document.getElementById('playerName').value;
     const playerInfoDiv = document.getElementById('playerInfo');
     playerInfoDiv.innerHTML = 'Loading...';
@@ -248,6 +249,16 @@ document.addEventListener('DOMContentLoaded', function() {
     debugLog('DOMContentLoaded event fired');
     const playerNameInput = document.getElementById('playerName');
     const searchButton = document.getElementById('searchButton');
+
+    if (!playerNameInput) {
+        console.error('Player name input not found');
+        debugLog('Player name input not found');
+    }
+
+    if (!searchButton) {
+        console.error('Search button not found');
+        debugLog('Search button not found');
+    }
 
     playerNameInput.addEventListener('keyup', function(event) {
         if (event.key === 'Enter') {
