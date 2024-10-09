@@ -35,7 +35,7 @@ async function getPlayerInfo() {
 }
 
 function getPlayerSkin(uuid) {
-    return `https://skinmc.net/en/3d/skin/${uuid}`;
+    return `https://crafatar.com/skins/${uuid}`;
 }
 
 async function displayPlayerInfo(data) {
@@ -60,11 +60,11 @@ async function displayPlayerInfo(data) {
                     <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
                     <p>Status: ${onlineStatus} (Server: ${server})</p>
                 </div>
-                <div class="player-skin-container">
-                    <iframe src="${skinUrl}" class="player-skin" frameborder="0"></iframe>
-                </div>
+                <div id="skinViewer" class="player-skin-container"></div>
             </div>
         `;
+
+        new SkinViewer(document.getElementById('skinViewer'), skinUrl);
 
         if (data.guild) {
             playerInfoDiv.innerHTML += `

@@ -64,6 +64,7 @@ function moveDebugBoxDown() {
 function updateDebugBoxState() {
     const debugBox = document.getElementById('debugBox');
     const debugContent = document.getElementById('debugContent');
+    const debugHeader = document.getElementById('debugHeader');
     
     switch(consoleState) {
         case 0: // Closed
@@ -79,6 +80,11 @@ function updateDebugBoxState() {
             debugBox.style.height = '50vh';
             break;
     }
+    
+    // Ensure content doesn't overflow
+    const maxHeight = window.innerHeight - debugHeader.offsetHeight;
+    debugBox.style.maxHeight = `${maxHeight}px`;
+    debugContent.style.maxHeight = `${maxHeight - debugHeader.offsetHeight}px`;
 }
 
 // Add event listeners for up and down buttons
@@ -92,3 +98,6 @@ console.error = (message) => {
 
 // Initialize debug console
 debugLog('Debug console initialized');
+
+// Add this event listener
+window.addEventListener('resize', updateDebugBoxState);

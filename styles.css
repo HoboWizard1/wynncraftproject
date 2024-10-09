@@ -117,8 +117,12 @@ button {
     color: #fff;
     font-family: monospace;
     font-size: 12px;
+    display: flex;
+    flex-direction: column;
     z-index: 1000;
     transition: height 0.3s ease;
+    max-height: 50vh;
+    overflow: hidden;
 }
 
 #debugHeader {
@@ -162,16 +166,10 @@ button {
 }
 
 #debugContent {
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    font-family: monospace;
-    font-size: 12px;
-    padding: 10px;
-    margin: 0;
     overflow-y: auto;
-    max-height: calc(100% - 40px); /* Subtract header height */
-    background-color: #000;
-    color: #fff;
+    word-wrap: break-word;
+    padding: 10px;
+    flex-grow: 1;
 }
 
 .player-header {

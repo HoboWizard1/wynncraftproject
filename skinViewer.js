@@ -1,0 +1,48 @@
+class SkinViewer {
+    constructor(container, skinUrl) {
+        this.container = container;
+        this.skinUrl = skinUrl;
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        this.renderer = new THREE.WebGLRenderer({ alpha: true });
+        this.model = null;
+        this.rotation = 0;
+
+        this.init();
+    }
+
+    init() {
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+        this.container.appendChild(this.renderer.domElement);
+
+        this.camera.position.z = 3;
+
+        const light = new THREE.PointLight(0xffffff, 1, 100);
+        light.position.set(0, 0, 10);
+        this.scene.add(light);
+
+        this.loadSkin();
+        this.animate();
+    }
+
+    loadSkin() {
+        const loader = new THREE.TextureLoader();
+        loader.load(this.skinUrl, (texture) => {
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+            const geometry = new THREE.BoxGeometry(1, 2, 1);
+            this.model = new THREE.Mesh(geometry, material);
+            this.scene.add(this.model);
+        });
+    }
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+
+        if (this.model) {
+            this.rotation += 0.01;
+            this.model.rotation.y = Math.sin(this.rotation) * 0.5;
+        }
+
+        this.renderer.render(this.scene, this.camera);
+    }
+}
