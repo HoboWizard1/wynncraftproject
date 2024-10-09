@@ -112,25 +112,25 @@ let isDebugVisible = true;
 function initializeDebug() {
     debugBox = document.getElementById('debugBox');
     debugContent = document.getElementById('debugContent');
-    const toggleButton = document.getElementById('toggleDebug');
+    const debugHeader = document.getElementById('debugHeader');
 
-    if (toggleButton) {
-        toggleButton.addEventListener('click', toggleDebugVisibility);
+    if (debugHeader) {
+        debugHeader.addEventListener('click', toggleDebugVisibility);
     }
-
-    updateDebugBoxState();
-    window.addEventListener('resize', updateDebugBoxState);
-}
-
-function updateDebugBoxState() {
-    const viewportHeight = window.innerHeight;
-    debugBox.style.height = `${viewportHeight * 0.6}px`; // 40% smaller
-    debugBox.style.maxHeight = `${viewportHeight * 0.6}px`;
 }
 
 function toggleDebugVisibility() {
     isDebugVisible = !isDebugVisible;
     debugContent.style.display = isDebugVisible ? 'block' : 'none';
+}
+
+function debugLog(message) {
+    if (debugContent) {
+        const logEntry = document.createElement('div');
+        logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        debugContent.appendChild(logEntry);
+        debugContent.scrollTop = debugContent.scrollHeight;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', initializeDebug);

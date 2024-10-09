@@ -106,15 +106,14 @@ button {
 /* Debug box styles */
 #debugBox {
     position: fixed;
-    top: 0;
+    bottom: 0;
+    left: 0;
     right: 0;
-    width: 300px;
     background-color: rgba(0, 0, 0, 0.8);
     color: #fff;
     font-family: monospace;
     font-size: 12px;
     z-index: 9999;
-    overflow: hidden;
 }
 
 #debugHeader {
@@ -125,8 +124,8 @@ button {
 
 #debugContent {
     padding: 10px;
+    max-height: 200px;
     overflow-y: auto;
-    max-height: calc(100% - 30px);
 }
 
 .debugButtons {
