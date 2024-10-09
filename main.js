@@ -7,5 +7,30 @@ function showTab(tabId) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    showTab('playerTab'); // Show player tab by default
+    initializeDebug();
+    showTab('playerTab');
+    setVersionNumber();
+    setupEventListeners();
 });
+
+function setVersionNumber() {
+    document.getElementById('version').textContent = 'v' + window.appVersion;
+}
+
+function setupEventListeners() {
+    const playerSearchForm = document.getElementById('playerSearchForm');
+    if (playerSearchForm) {
+        playerSearchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            getPlayerInfo();
+        });
+    }
+
+    const itemSearchForm = document.getElementById('itemSearchForm');
+    if (itemSearchForm) {
+        itemSearchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            searchItems();
+        });
+    }
+}

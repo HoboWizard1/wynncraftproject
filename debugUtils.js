@@ -1,7 +1,6 @@
-// Debug console setup
 let debugBox;
 let debugContent;
-let debugBoxHeight = 200; // Default height
+let debugBoxHeight = 200;
 let consoleState = 1; // 0: closed, 1: normal, 2: expanded
 
 function initializeDebug() {
@@ -52,7 +51,6 @@ function updateDebugBoxState() {
             break;
     }
     
-    // Ensure content doesn't overflow
     const maxHeight = window.innerHeight - debugHeader.offsetHeight;
     debugBox.style.maxHeight = `${maxHeight}px`;
     debugContent.style.maxHeight = `${maxHeight - debugHeader.offsetHeight}px`;
@@ -94,21 +92,16 @@ function debugLog(message) {
         debugContent.appendChild(logEntry);
         debugContent.scrollTop = debugContent.scrollHeight;
     }
-}
-
-function debugError(message) {
-    if (debugContent) {
-        const errorEntry = document.createElement('div');
-        errorEntry.textContent = `[${new Date().toLocaleTimeString()}] ERROR: ${message}`;
-        errorEntry.style.color = 'red';
-        debugContent.appendChild(errorEntry);
-        debugContent.scrollTop = debugContent.scrollHeight;
+    
+    if (consoleState === 0) {
+        moveDebugBoxUp();
     }
 }
 
-// Override console.error to use debugLog
-console.error = (message) => {
-    debugError(message);
-};
+function debugError(message) {
+    debugLog(`ERROR: ${message}`);
+}
 
-document.addEventListener('DOMContentLoaded', initializeDebug);
+// Override console.log and console.error
+console.log = debugLog;
+console.error = debugError;

@@ -46,31 +46,11 @@
     </div>
 
     <script src="versions.js"></script>
-    <script src="debug.js"></script>
+    <script src="debugUtils.js"></script>
+    <script src="api.js"></script>
+    <script src="uiUtils.js"></script>
     <script src="player.js"></script>
     <script src="items.js"></script>
-    <script>
-        function showTab(tabId) {
-            const tabs = document.getElementsByClassName('tab-content');
-            for (let tab of tabs) {
-                tab.style.display = 'none';
-            }
-            document.getElementById(tabId).style.display = 'block';
-        }
-
-        // Show player tab by default
-        document.addEventListener('DOMContentLoaded', function() {
-            showTab('playerTab');
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            debugLog('Debug console initialized and working.');
-        });
-
-        // Set the version number
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('version').textContent = 'v' + VERSION;
-        });
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>
