@@ -173,3 +173,19 @@ button {
     background-color: #000;
     color: #fff;
 }
+
+.player-header {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.player-skin {
+    width: 100px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.player-info {
+    flex: 1;
+}

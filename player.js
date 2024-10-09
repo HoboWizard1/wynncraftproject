@@ -34,6 +34,11 @@ async function getPlayerInfo() {
     }
 }
 
+async function getPlayerSkin(uuid) {
+    const skinUrl = `https://crafatar.com/renders/body/${uuid}?overlay=true`;
+    return skinUrl;
+}
+
 function displayPlayerInfo(data) {
     debugLog('Displaying player information');
     const playerInfoDiv = document.getElementById('playerInfo');
