@@ -94,7 +94,6 @@ async function searchItems(query) {
         
         debugLog(`Constructed API URL: ${apiUrl}`);
 
-        debugLog('Sending fetch request...');
         const response = await fetch(apiUrl);
         debugLog(`Received response with status: ${response.status}`);
 
@@ -102,14 +101,10 @@ async function searchItems(query) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        debugLog('Parsing JSON response...');
         const data = await response.json();
         debugLog(`Parsed data: ${JSON.stringify(data, null, 2)}`);
 
-        const results = data.results || {};
-        debugLog(`Number of items found: ${Object.keys(results).length}`);
-
-        return results;
+        return data;
     } catch (error) {
         console.error('Error searching items:', error);
         debugLog(`Error occurred during search: ${error.message}`);
@@ -117,30 +112,54 @@ async function searchItems(query) {
     }
 }
 
-function displayItemResults(items) {
+function displayItemResults(data) {
     debugLog('Displaying item results');
     const itemResults = document.getElementById('itemResults');
     itemResults.innerHTML = '';
 
-    const itemCount = Object.keys(items).length;
-    debugLog(`Number of items to display: ${itemCount}`);
-
-    if (itemCount === 0) {
+    if (!data || Object.keys(data).length === 0) {
         debugLog('No items found, displaying message');
         itemResults.innerHTML = '<p>No items found.</p>';
         return;
     }
 
-    for (const [itemName, itemData] of Object.entries(items)) {
+    for (const [itemName, itemData] of Object.entries(data)) {
         debugLog(`Creating element for item: ${itemName}`);
         const itemElement = document.createElement('div');
         itemElement.classList.add('item');
         itemElement.innerHTML = `
             <h3>${itemName}</h3>
             <p>Type: ${itemData.type}</p>
-            <p>Level: ${itemData.requirements?.level || 'N/A'}</p>
+            <p>Internal Name: ${itemData.internalName}</p>
+            ${itemData.weaponType ? `<p>Weapon Type: ${itemData.weaponType}</p>` : ''}
+            ${itemData.attackSpeed ? `<p>Attack Speed: ${itemData.attackSpeed}</p>` : ''}
             ${itemData.tier ? `<p>Tier: ${itemData.tier}</p>` : ''}
             ${itemData.rarity ? `<p>Rarity: ${itemData.rarity}</p>` : ''}
+            ${itemData.dropRestriction ? `<p>Drop Restriction: ${itemData.dropRestriction}</p>` : ''}
+            ${itemData.restrictions ? `<p>Restrictions: ${itemData.restrictions}</p>` : ''}
+            ${itemData.lore ? `<p>Lore: ${itemData.lore}</p>` : ''}
+            <h4>Requirements:</h4>
+            <ul>
+                ${Object.entries(itemData.requirements || {}).map(([key, value]) => `<li>${key}: ${value}</li>`).join('')}
+            </ul>
+            ${itemData.identifications ? `
+                <h4>Identifications:</h4>
+                <ul>
+                    ${Object.entries(itemData.identifications).map(([key, value]) => {
+                        if (typeof value === 'object') {
+                            return `<li>${key}: Min ${value.min}, Max ${value.max}</li>`;
+                        } else {
+                            return `<li>${key}: ${value}</li>`;
+                        }
+                    }).join('')}
+                </ul>
+            ` : ''}
+            ${itemData.base ? `
+                <h4>Base Stats:</h4>
+                <ul>
+                    ${Object.entries(itemData.base).map(([key, value]) => `<li>${key}: Min ${value.min}, Max ${value.max}</li>`).join('')}
+                </ul>
+            ` : ''}
         `;
         itemResults.appendChild(itemElement);
         debugLog(`Added item element for: ${itemName}`);
@@ -168,5 +187,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Additional debug information
+function debugLog(message) {
+    console.log(`[ItemSearch Debug] ${message}`);
+}
+
 debugLog('items.js script loaded');

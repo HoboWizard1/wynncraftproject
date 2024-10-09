@@ -215,12 +215,34 @@ button {
 
 #itemSearchInput {
     padding: 5px;
-    width: 200px;
+    width: 300px;
 }
 
 #itemResults {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     margin-top: 20px;
+}
+
+.item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.item h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.item h4 {
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.item ul {
+    padding-left: 20px;
+    margin-top: 5px;
 }
