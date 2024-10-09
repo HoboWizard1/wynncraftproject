@@ -7,14 +7,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="header">
-        <h1>Wynncraft Info</h1>
-        <div id="navigation">
-            <button onclick="showTab('playerTab')">Player Info</button>
-            <button onclick="showTab('itemTab')">Item Info</button>
-        </div>
-    </div>
-
     <div id="content">
         <div id="playerTab" class="tab-content">
             <h2>Player Search</h2>
@@ -35,6 +27,11 @@
         </div>
     </div>
 
+    <div id="navigation">
+        <button onclick="showTab('playerTab')">Player Info</button>
+        <button onclick="showTab('itemTab')">Item Info</button>
+    </div>
+
     <div id="debugBox">
         <div id="debugHeader">
             <span>Debug Console</span>
@@ -46,6 +43,19 @@
     <script src="debug.js"></script>
     <script src="player.js"></script>
     <script src="items.js"></script>
-    <script src="main.js"></script>
+    <script>
+        function showTab(tabId) {
+            const tabs = document.getElementsByClassName('tab-content');
+            for (let tab of tabs) {
+                tab.style.display = 'none';
+            }
+            document.getElementById(tabId).style.display = 'block';
+        }
+
+        // Show player tab by default
+        document.addEventListener('DOMContentLoaded', function() {
+            showTab('playerTab');
+        });
+    </script>
 </body>
 </html>
