@@ -34,12 +34,11 @@ async function getPlayerInfo() {
     }
 }
 
-async function getPlayerSkin(uuid) {
-    const skinUrl = `https://crafatar.com/renders/body/${uuid}?overlay=true`;
-    return skinUrl;
+function getPlayerSkin(uuid) {
+    return `https://crafatar.com/renders/body/${uuid}?overlay=true`;
 }
 
-function displayPlayerInfo(data) {
+async function displayPlayerInfo(data) {
     debugLog('Displaying player information');
     const playerInfoDiv = document.getElementById('playerInfo');
     try {
@@ -48,14 +47,21 @@ function displayPlayerInfo(data) {
             '<span style="color: lightcoral;">Offline</span>';
         const server = data.server || 'N/A';
 
+        const skinUrl = getPlayerSkin(data.uuid);
+
         playerInfoDiv.innerHTML = `
-            <h2>${data.username}</h2>
-            <p>Rank: ${data.supportRank || data.rank}</p>
-            <p>Supporter Rank: ${data.supportRank || 'None'}</p>
-            <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
-            <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
-            <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
-            <p>Status: ${onlineStatus} (Server: ${server})</p>
+            <div class="player-header">
+                <img src="${skinUrl}" alt="${data.username}'s skin" class="player-skin">
+                <div class="player-info">
+                    <h2>${data.username}</h2>
+                    <p>Rank: ${data.rank}</p>
+                    ${data.supportRank ? `<p>Supporter Rank: ${data.supportRank}</p>` : ''}
+                    <p>First Join: ${new Date(data.firstJoin).toLocaleString()}</p>
+                    <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
+                    <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
+                    <p>Status: ${onlineStatus} (Server: ${server})</p>
+                </div>
+            </div>
         `;
 
         if (data.guild) {
