@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="version">v1.0.0</div> <!-- Add this line -->
     <div id="header">
+        <span id="version"></span> <!-- We'll fill this dynamically -->
         <h1>Wynncraft Info</h1>
         <div id="navigation">
             <button onclick="showTab('playerTab')">Player Info</button>
@@ -43,6 +43,7 @@
         <div id="debugContent"></div>
     </div>
 
+    <script src="versions.js"></script>
     <script src="debug.js"></script>
     <script src="player.js"></script>
     <script src="items.js"></script>
@@ -62,6 +63,11 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             debugLog('Debug console initialized and working.');
+        });
+
+        // Set the version number
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('version').textContent = 'v' + VERSION;
         });
     </script>
 </body>

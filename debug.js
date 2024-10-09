@@ -122,6 +122,15 @@ function initializeDebug() {
     if (debugContent) {
         debugContent.style.display = 'block';
     }
+
+    // Force correct positioning
+    if (debugBox) {
+        debugBox.style.position = 'fixed';
+        debugBox.style.bottom = '0';
+        debugBox.style.left = '0';
+        debugBox.style.right = '0';
+        debugBox.style.top = 'auto';  // Ensure it's not being pushed to the top
+    }
 }
 
 function toggleDebugVisibility() {
