@@ -87,32 +87,52 @@ function displayItems(items) {
 }
 
 async function searchItems(query) {
+    debugLog(`Searching for items with query: "${query}"`);
     try {
         const corsProxy = 'https://api.allorigins.win/raw?url=';
         const apiUrl = `${corsProxy}${encodeURIComponent(`https://api.wynncraft.com/v3/item/search/${query}`)}`;
         
+        debugLog(`Constructed API URL: ${apiUrl}`);
+
+        debugLog('Sending fetch request...');
         const response = await fetch(apiUrl);
+        debugLog(`Received response with status: ${response.status}`);
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        debugLog('Parsing JSON response...');
         const data = await response.json();
-        return data.results || {};
+        debugLog(`Parsed data: ${JSON.stringify(data, null, 2)}`);
+
+        const results = data.results || {};
+        debugLog(`Number of items found: ${Object.keys(results).length}`);
+
+        return results;
     } catch (error) {
         console.error('Error searching items:', error);
+        debugLog(`Error occurred during search: ${error.message}`);
         return {};
     }
 }
 
 function displayItemResults(items) {
+    debugLog('Displaying item results');
     const itemResults = document.getElementById('itemResults');
     itemResults.innerHTML = '';
 
-    if (Object.keys(items).length === 0) {
+    const itemCount = Object.keys(items).length;
+    debugLog(`Number of items to display: ${itemCount}`);
+
+    if (itemCount === 0) {
+        debugLog('No items found, displaying message');
         itemResults.innerHTML = '<p>No items found.</p>';
         return;
     }
 
     for (const [itemName, itemData] of Object.entries(items)) {
+        debugLog(`Creating element for item: ${itemName}`);
         const itemElement = document.createElement('div');
         itemElement.classList.add('item');
         itemElement.innerHTML = `
@@ -123,17 +143,30 @@ function displayItemResults(items) {
             ${itemData.rarity ? `<p>Rarity: ${itemData.rarity}</p>` : ''}
         `;
         itemResults.appendChild(itemElement);
+        debugLog(`Added item element for: ${itemName}`);
     }
+
+    debugLog('Finished displaying all items');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    debugLog('DOMContentLoaded event fired');
     const itemSearchForm = document.getElementById('itemSearchForm');
     if (itemSearchForm) {
+        debugLog('Item search form found, adding event listener');
         itemSearchForm.addEventListener('submit', async function(e) {
             e.preventDefault();
+            debugLog('Search form submitted');
             const query = document.getElementById('itemSearchInput').value;
+            debugLog(`Search query: "${query}"`);
             const searchResults = await searchItems(query);
+            debugLog('Search completed, displaying results');
             displayItemResults(searchResults);
         });
+    } else {
+        debugLog('Item search form not found in the DOM');
     }
 });
+
+// Additional debug information
+debugLog('items.js script loaded');
