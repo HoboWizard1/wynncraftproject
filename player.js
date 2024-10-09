@@ -47,8 +47,6 @@ async function displayPlayerInfo(data) {
             '<span style="color: lightcoral;">Offline</span>';
         const server = data.server || 'N/A';
 
-        const skinUrl = getPlayerSkin(data.uuid);
-
         playerInfoDiv.innerHTML = `
             <div class="player-header">
                 <div class="player-info">
@@ -64,7 +62,15 @@ async function displayPlayerInfo(data) {
             </div>
         `;
 
-        new SkinViewer(document.getElementById('skinViewer'), skinUrl);
+        const skinUrl = getPlayerSkin(data.uuid);
+        
+        // Ensure the skinViewer element exists before creating the SkinViewer
+        const skinViewerElement = document.getElementById('skinViewer');
+        if (skinViewerElement && typeof SkinViewer === 'function') {
+            new SkinViewer(skinViewerElement, skinUrl);
+        } else {
+            console.error('SkinViewer not available or skinViewer element not found');
+        }
 
         if (data.guild) {
             playerInfoDiv.innerHTML += `
