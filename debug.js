@@ -117,11 +117,18 @@ function initializeDebug() {
     if (debugHeader) {
         debugHeader.addEventListener('click', toggleDebugVisibility);
     }
+
+    // Ensure debug content is visible on initialization
+    if (debugContent) {
+        debugContent.style.display = 'block';
+    }
 }
 
 function toggleDebugVisibility() {
     isDebugVisible = !isDebugVisible;
-    debugContent.style.display = isDebugVisible ? 'block' : 'none';
+    if (debugContent) {
+        debugContent.style.display = isDebugVisible ? 'block' : 'none';
+    }
 }
 
 function debugLog(message) {
