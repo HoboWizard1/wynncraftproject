@@ -64,13 +64,22 @@ async function displayPlayerInfo(data) {
         `;
 
         const skinUrl = getPlayerSkin(data.uuid);
+        debugLog(`Skin URL: ${skinUrl}`);
         
         // Ensure the skinViewer element exists before creating the SkinViewer
         const skinViewerElement = document.getElementById('skinViewer');
-        if (skinViewerElement && typeof SkinViewer === 'function') {
-            new SkinViewer(skinViewerElement, skinUrl);
+        if (skinViewerElement) {
+            debugLog('SkinViewer element found');
+            if (typeof SkinViewer === 'function') {
+                debugLog('SkinViewer class is available');
+                new SkinViewer(skinViewerElement, skinUrl);
+            } else {
+                console.error('SkinViewer class is not defined');
+                debugLog('SkinViewer class is not defined');
+            }
         } else {
-            console.error('SkinViewer not available or skinViewer element not found');
+            console.error('skinViewer element not found');
+            debugLog('skinViewer element not found');
         }
 
         if (data.guild) {
