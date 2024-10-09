@@ -119,6 +119,21 @@ button {
 #debugHeader {
     padding: 5px;
     background-color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#debugHeader button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 0 2px;
     cursor: pointer;
 }
 
@@ -126,21 +141,11 @@ button {
     padding: 10px;
     max-height: 200px;
     overflow-y: auto;
-    display: block; /* Ensure content is visible by default */
 }
 
 .debugButtons {
     display: flex;
     gap: 5px;
-}
-
-#debugHeader button {
-    background-color: #555;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 12px;
 }
 
 #debugHeader button:hover {

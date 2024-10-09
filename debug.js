@@ -112,19 +112,21 @@ let isDebugVisible = true;
 function initializeDebug() {
     debugBox = document.getElementById('debugBox');
     debugContent = document.getElementById('debugContent');
-    const debugHeader = document.getElementById('debugHeader');
+    const toggleButton = document.getElementById('toggleDebug');
+    const clearButton = document.getElementById('clearDebug');
 
-    if (debugHeader) {
-        debugHeader.addEventListener('click', toggleDebugVisibility);
+    if (toggleButton) {
+        toggleButton.addEventListener('click', toggleDebugVisibility);
+    }
+
+    if (clearButton) {
+        clearButton.addEventListener('click', clearDebugContent);
     }
 
     // Ensure debug content is visible on initialization
     if (debugContent) {
         debugContent.style.display = 'block';
     }
-
-    // Add a test message
-    debugLog('Debug console initialized');
 }
 
 function toggleDebugVisibility() {
@@ -134,11 +136,27 @@ function toggleDebugVisibility() {
     }
 }
 
+function clearDebugContent() {
+    if (debugContent) {
+        debugContent.innerHTML = '';
+    }
+}
+
 function debugLog(message) {
     if (debugContent) {
         const logEntry = document.createElement('div');
         logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
         debugContent.appendChild(logEntry);
+        debugContent.scrollTop = debugContent.scrollHeight;
+    }
+}
+
+function debugError(message) {
+    if (debugContent) {
+        const errorEntry = document.createElement('div');
+        errorEntry.textContent = `[${new Date().toLocaleTimeString()}] ERROR: ${message}`;
+        errorEntry.style.color = 'red';
+        debugContent.appendChild(errorEntry);
         debugContent.scrollTop = debugContent.scrollHeight;
     }
 }
