@@ -88,7 +88,13 @@ function displayItems(items) {
 
 async function searchItems(query) {
     try {
-        const response = await fetch(`https://api.wynncraft.com/v3/item/search/${encodeURIComponent(query)}`);
+        const corsProxy = 'https://api.allorigins.win/raw?url=';
+        const apiUrl = `${corsProxy}${encodeURIComponent(`https://api.wynncraft.com/v3/item/search/${query}`)}`;
+        
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         return data.results || {};
     } catch (error) {
@@ -97,9 +103,37 @@ async function searchItems(query) {
     }
 }
 
-document.getElementById('itemSearchForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const query = document.getElementById('itemSearchInput').value;
-    const searchResults = await searchItems(query);
-    displayItems(searchResults);
+function displayItemResults(items) {
+    const itemResults = document.getElementById('itemResults');
+    itemResults.innerHTML = '';
+
+    if (Object.keys(items).length === 0) {
+        itemResults.innerHTML = '<p>No items found.</p>';
+        return;
+    }
+
+    for (const [itemName, itemData] of Object.entries(items)) {
+        const itemElement = document.createElement('div');
+        itemElement.classList.add('item');
+        itemElement.innerHTML = `
+            <h3>${itemName}</h3>
+            <p>Type: ${itemData.type}</p>
+            <p>Level: ${itemData.requirements?.level || 'N/A'}</p>
+            ${itemData.tier ? `<p>Tier: ${itemData.tier}</p>` : ''}
+            ${itemData.rarity ? `<p>Rarity: ${itemData.rarity}</p>` : ''}
+        `;
+        itemResults.appendChild(itemElement);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const itemSearchForm = document.getElementById('itemSearchForm');
+    if (itemSearchForm) {
+        itemSearchForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const query = document.getElementById('itemSearchInput').value;
+            const searchResults = await searchItems(query);
+            displayItemResults(searchResults);
+        });
+    }
 });
