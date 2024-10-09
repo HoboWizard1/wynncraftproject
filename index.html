@@ -3,36 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wynncraft Info Lookup</title>
+    <title>Wynncraft Info</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="version.js"></script>
 </head>
 <body>
-    <div id="versionDisplay"></div>
-    <div class="container">
-        <h1>Wynncraft Info Lookup</h1>
-        <div class="tab">
-            <button class="tablinks active" onclick="openTab(event, 'PlayerInfo')">Player Info</button>
-            <button class="tablinks" onclick="window.location.href='items.html'">Item Info</button>
+    <div id="header">
+        <h1>Wynncraft Info</h1>
+        <div id="navigation">
+            <button onclick="showTab('playerTab')">Player Info</button>
+            <button onclick="showTab('itemTab')">Item Info</button>
         </div>
+    </div>
 
-        <div id="PlayerInfo" class="tabcontent" style="display:block;">
-            <h2>Player Information</h2>
-            <div id="searchContainer">
+    <div id="content">
+        <div id="playerTab" class="tab-content">
+            <h2>Player Search</h2>
+            <form id="playerSearchForm">
                 <input type="text" id="playerName" placeholder="Enter player name">
-                <button id="searchButton">Search</button>
-            </div>
+                <button type="submit">Search</button>
+            </form>
             <div id="playerInfo"></div>
         </div>
 
-        <div id="ItemInfo" class="tabcontent">
-            <h2>Item Information</h2>
-            <input type="text" id="itemName" placeholder="Enter item name">
-            <button onclick="getItemInfo()">Get Item Info</button>
-            <div id="itemInfo"></div>
-        </div>
-
-        <div id="itemsTab" class="tab-content">
+        <div id="itemTab" class="tab-content" style="display: none;">
             <h2>Item Search</h2>
             <form id="itemSearchForm">
                 <input type="text" id="itemSearchInput" placeholder="Search for an item...">
@@ -41,14 +34,18 @@
             <div id="itemResults"></div>
         </div>
     </div>
-    
+
+    <div id="debugBox">
+        <div id="debugHeader">
+            <span>Debug Console</span>
+            <button id="toggleDebug">Toggle</button>
+        </div>
+        <div id="debugContent"></div>
+    </div>
+
     <script src="debug.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="skinViewer.js"></script>
     <script src="player.js"></script>
     <script src="items.js"></script>
-    <script>
-        document.getElementById('versionDisplay').textContent = `v${window.appVersion}`;
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>

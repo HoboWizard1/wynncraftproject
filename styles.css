@@ -83,11 +83,7 @@ button {
     cursor: pointer;
     background-color: #f0f0f0;
     padding: 10px;
-    margin: 5px 0;
-}
-
-.character h4:hover {
-    background-color: #e0e0e0;
+    margin: 0;
 }
 
 .characterDetails {
@@ -245,4 +241,126 @@ button {
 .item ul {
     padding-left: 20px;
     margin-top: 5px;
+}
+
+.item-image {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.character {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.character h4 {
+    cursor: pointer;
+    margin: 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+}
+
+.characterDetails {
+    padding: 10px;
+}
+
+.characterDetails ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+/* New styles for the combined layout */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#header {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+#navigation {
+    margin-top: 10px;
+}
+
+#navigation button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+#content {
+    flex: 1;
+    padding: 20px;
+}
+
+.tab-content {
+    display: none;
+}
+
+/* Styles for item search results (if not already present) */
+#itemResults {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.item h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.item h4 {
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.item ul {
+    padding-left: 20px;
+    margin-top: 5px;
+}
+
+.item-image {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+/* Make sure these don't conflict with existing styles */
+#playerSearchForm,
+#itemSearchForm {
+    margin-bottom: 20px;
+}
+
+#playerName,
+#itemSearchInput {
+    padding: 5px;
+    width: 300px;
 }

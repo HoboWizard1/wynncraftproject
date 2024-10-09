@@ -86,7 +86,8 @@ function displayItems(items) {
     }
 }
 
-async function searchItems(query) {
+async function searchItems() {
+    const query = document.getElementById('itemSearchInput').value;
     debugLog(`Searching for items with query: "${query}"`);
     try {
         const corsProxy = 'https://api.allorigins.win/raw?url=';
@@ -128,6 +129,7 @@ function displayItemResults(data) {
         const itemElement = document.createElement('div');
         itemElement.classList.add('item');
         itemElement.innerHTML = `
+            <img src="${getItemImageUrl(itemData)}" alt="${itemName}" class="item-image" onerror="this.src='images/unknown.png';">
             <h3>${itemName}</h3>
             <p>Type: ${itemData.type}</p>
             <p>Internal Name: ${itemData.internalName}</p>
@@ -168,22 +170,18 @@ function displayItemResults(data) {
     debugLog('Finished displaying all items');
 }
 
+function getItemImageUrl(itemData) {
+    const internalName = itemData.internalName.toLowerCase().replace(/\s+/g, '_');
+    return `https://cdn.wynncraft.com/nextgen/items/${internalName}.png`;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    debugLog('DOMContentLoaded event fired');
     const itemSearchForm = document.getElementById('itemSearchForm');
     if (itemSearchForm) {
-        debugLog('Item search form found, adding event listener');
-        itemSearchForm.addEventListener('submit', async function(e) {
+        itemSearchForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            debugLog('Search form submitted');
-            const query = document.getElementById('itemSearchInput').value;
-            debugLog(`Search query: "${query}"`);
-            const searchResults = await searchItems(query);
-            debugLog('Search completed, displaying results');
-            displayItemResults(searchResults);
+            searchItems();
         });
-    } else {
-        debugLog('Item search form not found in the DOM');
     }
 });
 

@@ -240,31 +240,11 @@ function debugLog(message) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    debugLog('DOMContentLoaded event fired');
-    const playerNameInput = document.getElementById('playerName');
-    const searchButton = document.getElementById('searchButton');
-
-    if (!playerNameInput) {
-        console.error('Player name input not found');
-        debugLog('Player name input not found');
-    }
-
-    if (!searchButton) {
-        console.error('Search button not found');
-        debugLog('Search button not found');
-    }
-
-    playerNameInput.addEventListener('keyup', function(event) {
-        if (event.key === 'Enter') {
-            debugLog('Enter key pressed in player name input');
+    const playerSearchForm = document.getElementById('playerSearchForm');
+    if (playerSearchForm) {
+        playerSearchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
             getPlayerInfo();
-        }
-    });
-
-    searchButton.addEventListener('click', function() {
-        debugLog('Search button clicked');
-        getPlayerInfo();
-    });
-
-    debugLog('Event listeners added to player name input and search button');
+        });
+    }
 });
