@@ -36,7 +36,7 @@ async function getPlayerInfo() {
 }
 
 function getPlayerSkin(uuid) {
-    return `https://crafatar.com/skins/${uuid}`;
+    return `https://crafatar.com/renders/body/${uuid}?overlay=true`;
 }
 
 async function displayPlayerInfo(data) {
@@ -47,6 +47,8 @@ async function displayPlayerInfo(data) {
             '<span style="color: lightgreen;">Online</span>' : 
             '<span style="color: lightcoral;">Offline</span>';
         const server = data.server || 'N/A';
+
+        const skinUrl = getPlayerSkin(data.uuid);
 
         playerInfoDiv.innerHTML = `
             <div class="player-header">
@@ -59,28 +61,11 @@ async function displayPlayerInfo(data) {
                     <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
                     <p>Status: ${onlineStatus} (Server: ${server})</p>
                 </div>
-                <div id="skinViewer" class="player-skin-container"></div>
+                <div class="player-skin-container">
+                    <img src="${skinUrl}" alt="${data.username}'s skin" class="player-skin">
+                </div>
             </div>
         `;
-
-        const skinUrl = getPlayerSkin(data.uuid);
-        debugLog(`Skin URL: ${skinUrl}`);
-        
-        // Ensure the skinViewer element exists before creating the SkinViewer
-        const skinViewerElement = document.getElementById('skinViewer');
-        if (skinViewerElement) {
-            debugLog('SkinViewer element found');
-            if (typeof SkinViewer === 'function') {
-                debugLog('SkinViewer class is available');
-                new SkinViewer(skinViewerElement, skinUrl);
-            } else {
-                console.error('SkinViewer class is not defined');
-                debugLog('SkinViewer class is not defined');
-            }
-        } else {
-            console.error('skinViewer element not found');
-            debugLog('skinViewer element not found');
-        }
 
         if (data.guild) {
             playerInfoDiv.innerHTML += `
