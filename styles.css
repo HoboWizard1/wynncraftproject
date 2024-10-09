@@ -109,7 +109,6 @@ button {
     bottom: 0;
     left: 0;
     right: 0;
-    width: 100%; /* Ensure it spans the full width */
     background-color: rgba(0, 0, 0, 0.8);
     color: #fff;
     font-family: monospace;
@@ -278,15 +277,6 @@ body {
     color: white;
     padding: 10px; /* Slightly reduced padding */
     text-align: center;
-}
-
-#version {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
 }
 
 #header h1 {

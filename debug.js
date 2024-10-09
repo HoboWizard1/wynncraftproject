@@ -123,14 +123,8 @@ function initializeDebug() {
         debugContent.style.display = 'block';
     }
 
-    // Force correct positioning
-    if (debugBox) {
-        debugBox.style.position = 'fixed';
-        debugBox.style.bottom = '0';
-        debugBox.style.left = '0';
-        debugBox.style.right = '0';
-        debugBox.style.top = 'auto';  // Ensure it's not being pushed to the top
-    }
+    // Add a test message
+    debugLog('Debug console initialized');
 }
 
 function toggleDebugVisibility() {
