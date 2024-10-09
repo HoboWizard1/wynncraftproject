@@ -19,11 +19,12 @@ let consoleState = 0; // 0: closed, 1: normal, 2: expanded
 
 // Debug logging function
 function debugLog(message) {
-    const debugContent = document.getElementById('debugContent');
-    const timestamp = new Date().toLocaleTimeString();
-    const formattedMessage = `[${timestamp}] ${message}\n`;
-    debugContent.textContent += formattedMessage;
-    debugContent.scrollTop = debugContent.scrollHeight;
+    if (debugContent) {
+        const logEntry = document.createElement('div');
+        logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        debugContent.appendChild(logEntry);
+        debugContent.scrollTop = debugContent.scrollHeight;
+    }
 }
 
 // Clear debug box
@@ -103,3 +104,33 @@ debugLog('Debug console initialized');
 window.addEventListener('resize', updateDebugBoxState);
 
 console.log('Debug.js loaded');
+
+let debugBox;
+let debugContent;
+let isDebugVisible = true;
+
+function initializeDebug() {
+    debugBox = document.getElementById('debugBox');
+    debugContent = document.getElementById('debugContent');
+    const toggleButton = document.getElementById('toggleDebug');
+
+    if (toggleButton) {
+        toggleButton.addEventListener('click', toggleDebugVisibility);
+    }
+
+    updateDebugBoxState();
+    window.addEventListener('resize', updateDebugBoxState);
+}
+
+function updateDebugBoxState() {
+    const viewportHeight = window.innerHeight;
+    debugBox.style.height = `${viewportHeight * 0.6}px`; // 40% smaller
+    debugBox.style.maxHeight = `${viewportHeight * 0.6}px`;
+}
+
+function toggleDebugVisibility() {
+    isDebugVisible = !isDebugVisible;
+    debugContent.style.display = isDebugVisible ? 'block' : 'none';
+}
+
+document.addEventListener('DOMContentLoaded', initializeDebug);

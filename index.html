@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div id="header">
+        <h1>Wynncraft Info</h1>
+        <div id="navigation">
+            <button onclick="showTab('playerTab')">Player Info</button>
+            <button onclick="showTab('itemTab')">Item Info</button>
+        </div>
+    </div>
+
     <div id="content">
         <div id="playerTab" class="tab-content">
             <h2>Player Search</h2>
@@ -25,11 +33,6 @@
             </form>
             <div id="itemResults"></div>
         </div>
-    </div>
-
-    <div id="navigation">
-        <button onclick="showTab('playerTab')">Player Info</button>
-        <button onclick="showTab('itemTab')">Item Info</button>
     </div>
 
     <div id="debugBox">

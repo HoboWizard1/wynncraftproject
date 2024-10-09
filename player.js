@@ -173,35 +173,69 @@ function formatRankingName(name) {
 }
 
 function generateCharacterDetails(character) {
-    try {
-        let details = '';
-        for (const [key, value] of Object.entries(character)) {
-            if (typeof value === 'object' && value !== null) {
-                details += `<p><strong>${key}:</strong></p>`;
-                details += '<ul>';
-                for (const [subKey, subValue] of Object.entries(value)) {
-                    details += `<li><strong>${subKey}:</strong> ${JSON.stringify(subValue)}</li>`;
-                }
-                details += '</ul>';
-            } else {
-                details += `<p><strong>${key}:</strong> ${value}</p>`;
-            }
-        }
-        return details;
-    } catch (error) {
-        console.error('Error in generateCharacterDetails:', error);
-        debugLog(`Error in generateCharacterDetails: ${error.message}`);
-        return '<p class="error">Error generating character details</p>';
+    let details = `
+        <p>Total Level: ${character.level}</p>
+        <p>Class: ${character.type}</p>
+        <h5>Skills:</h5>
+        <ul>
+            <li>Strength: ${character.skills.strength}</li>
+            <li>Dexterity: ${character.skills.dexterity}</li>
+            <li>Intelligence: ${character.skills.intelligence}</li>
+            <li>Defense: ${character.skills.defense}</li>
+            <li>Agility: ${character.skills.agility}</li>
+        </ul>
+    `;
+
+    if (character.skillPoints) {
+        details += `
+            <h5>Skill Points:</h5>
+            <p>Available: ${character.skillPoints.available}</p>
+            <ul>
+                <li>Strength: ${character.skillPoints.strength}</li>
+                <li>Dexterity: ${character.skillPoints.dexterity}</li>
+                <li>Intelligence: ${character.skillPoints.intelligence}</li>
+                <li>Defense: ${character.skillPoints.defense}</li>
+                <li>Agility: ${character.skillPoints.agility}</li>
+            </ul>
+        `;
     }
+
+    if (character.professions) {
+        details += '<h5>Professions:</h5><ul>';
+        for (const [profession, level] of Object.entries(character.professions)) {
+            details += `<li>${profession}: ${level}</li>`;
+        }
+        details += '</ul>';
+    }
+
+    if (character.dungeons) {
+        details += '<h5>Dungeons Completed:</h5><ul>';
+        for (const [dungeon, count] of Object.entries(character.dungeons)) {
+            details += `<li>${dungeon}: ${count}</li>`;
+        }
+        details += '</ul>';
+    }
+
+    if (character.quests) {
+        details += `<p>Quests Completed: ${character.quests.completed}/${character.quests.total}</p>`;
+    }
+
+    // Add ability tree information if available
+    if (character.abilityTree) {
+        details += '<h5>Ability Tree:</h5><ul>';
+        for (const [ability, points] of Object.entries(character.abilityTree)) {
+            details += `<li>${ability}: ${points} points</li>`;
+        }
+        details += '</ul>';
+    }
+
+    return details;
 }
 
 function toggleCharacter(charId) {
     const charDetails = document.getElementById(charId);
     if (charDetails) {
         charDetails.style.display = charDetails.style.display === 'none' ? 'block' : 'none';
-    } else {
-        console.error(`Character details element not found for ID: ${charId}`);
-        debugLog(`Error: Character details element not found for ID: ${charId}`);
     }
 }
 
