@@ -35,7 +35,7 @@ async function getPlayerInfo() {
 }
 
 function getPlayerSkin(uuid) {
-    return `https://crafatar.com/renders/body/${uuid}?overlay=true`;
+    return `https://skinmc.net/en/3d/skin/${uuid}`;
 }
 
 async function displayPlayerInfo(data) {
@@ -51,7 +51,6 @@ async function displayPlayerInfo(data) {
 
         playerInfoDiv.innerHTML = `
             <div class="player-header">
-                <img src="${skinUrl}" alt="${data.username}'s skin" class="player-skin">
                 <div class="player-info">
                     <h2>${data.username}</h2>
                     <p>Rank: ${data.rank}</p>
@@ -60,6 +59,9 @@ async function displayPlayerInfo(data) {
                     <p>Last Join: ${new Date(data.lastJoin).toLocaleString()}</p>
                     <p>Playtime: ${data.playtime.toFixed(2)} hours</p>
                     <p>Status: ${onlineStatus} (Server: ${server})</p>
+                </div>
+                <div class="player-skin-container">
+                    <iframe src="${skinUrl}" class="player-skin" frameborder="0"></iframe>
                 </div>
             </div>
         `;
