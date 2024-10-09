@@ -56,3 +56,50 @@ function displayErrorMessage(error) {
     itemInfoDiv.innerHTML = `<p class="error">${errorMessage}</p>`;
     debugLog(`Error: ${errorMessage}`);
 }
+
+async function fetchItems() {
+    try {
+        const response = await fetch('https://api.wynncraft.com/v3/item/database?fullResult');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching items:', error);
+        return null;
+    }
+}
+
+function displayItems(items) {
+    const itemList = document.getElementById('itemList');
+    itemList.innerHTML = '';
+
+    for (const [itemName, itemData] of Object.entries(items)) {
+        const itemElement = document.createElement('div');
+        itemElement.classList.add('item');
+        itemElement.innerHTML = `
+            <h3>${itemName}</h3>
+            <p>Type: ${itemData.type}</p>
+            <p>Level: ${itemData.requirements?.level || 'N/A'}</p>
+            ${itemData.tier ? `<p>Tier: ${itemData.tier}</p>` : ''}
+            ${itemData.rarity ? `<p>Rarity: ${itemData.rarity}</p>` : ''}
+        `;
+        itemList.appendChild(itemElement);
+    }
+}
+
+async function searchItems(query) {
+    try {
+        const response = await fetch(`https://api.wynncraft.com/v3/item/search/${encodeURIComponent(query)}`);
+        const data = await response.json();
+        return data.results || {};
+    } catch (error) {
+        console.error('Error searching items:', error);
+        return {};
+    }
+}
+
+document.getElementById('itemSearchForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const query = document.getElementById('itemSearchInput').value;
+    const searchResults = await searchItems(query);
+    displayItems(searchResults);
+});
