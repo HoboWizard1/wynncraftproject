@@ -274,29 +274,29 @@ body {
 #header {
     background-color: #333;
     color: white;
-    padding: 5px; /* Reduced padding */
+    padding: 10px; /* Slightly reduced padding */
     text-align: center;
 }
 
 #header h1 {
-    margin: 0;
-    font-size: 1.5em; /* Smaller font size for the title */
+    margin: 0 0 10px 0; /* Reduced bottom margin */
+    font-size: 1.8em; /* Slightly smaller font size for the title */
 }
 
 #navigation {
-    margin-top: 5px; /* Reduced margin */
+    margin-top: 5px; /* Slightly reduced margin */
 }
 
 #navigation button {
     background-color: #4CAF50;
     border: none;
     color: white;
-    padding: 5px 10px; /* Reduced padding */
+    padding: 8px 15px; /* Slightly reduced padding */
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 14px; /* Smaller font size for buttons */
-    margin: 2px 1px; /* Reduced margin */
+    font-size: 15px; /* Slightly smaller font size for buttons */
+    margin: 2px 5px; /* Adjusted margin */
     cursor: pointer;
 }
 

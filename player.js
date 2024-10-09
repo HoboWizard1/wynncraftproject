@@ -200,6 +200,15 @@ function generateCharacterDetails(character) {
         `;
     }
 
+    // Add ability tree information if available
+    if (character.abilityTree) {
+        details += '<h5>Ability Tree:</h5><ul>';
+        for (const [ability, points] of Object.entries(character.abilityTree)) {
+            details += `<li>${ability}: ${points} points</li>`;
+        }
+        details += '</ul>';
+    }
+
     if (character.professions) {
         details += '<h5>Professions:</h5><ul>';
         for (const [profession, level] of Object.entries(character.professions)) {
@@ -218,15 +227,6 @@ function generateCharacterDetails(character) {
 
     if (character.quests) {
         details += `<p>Quests Completed: ${character.quests.completed}/${character.quests.total}</p>`;
-    }
-
-    // Add ability tree information if available
-    if (character.abilityTree) {
-        details += '<h5>Ability Tree:</h5><ul>';
-        for (const [ability, points] of Object.entries(character.abilityTree)) {
-            details += `<li>${ability}: ${points} points</li>`;
-        }
-        details += '</ul>';
     }
 
     return details;
