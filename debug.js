@@ -127,6 +127,7 @@ function initializeDebug() {
     `;
 
     debugContent = document.getElementById('debugContent');
+    debugContent.style.height = `${debugBoxHeight}px`;
 
     document.getElementById('debugBoxUp').addEventListener('click', () => adjustDebugBoxHeight(50));
     document.getElementById('debugBoxDown').addEventListener('click', () => adjustDebugBoxHeight(-50));
